@@ -1,0 +1,35 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:stock.configuration,errors_path_edi:"
+msgid "Errors Path"
+msgstr "Path de errores"
+
+msgctxt "field:stock.configuration,inbox_path_edi:"
+msgid "Inbox Path EDI"
+msgstr "Path de entrada EDI"
+
+msgctxt "field:stock.configuration,template_order_response_edi:"
+msgid "Template EDI Used for Response"
+msgstr "Plantilla EDI usada para la Respuesta"
+
+msgctxt "field:stock.move,edi_description:"
+msgid "EDI Description"
+msgstr "Descripción EDI"
+
+msgctxt "field:stock.move,edi_quantity:"
+msgid "EDI Quantity"
+msgstr "Cantidad EDI"
+
+msgctxt "model:ir.cron,name:cron_import_edi_shipment_in"
+msgid "Import EDI Supplier Shipments"
+msgstr "Importar Albaranes de Proveedor EDI"
+
+msgctxt "model:res.user,name:user_edi_shipment_in"
+msgid "Cron EDI Shipments"
+msgstr "Cron Albaranes EDI"
+
+msgctxt "view:stock.configuration:"
+msgid "EDI"
+msgstr "EDI"
