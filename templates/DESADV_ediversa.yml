@@ -1,0 +1,20 @@
+control_chars:
+    data_separator: '|'
+    segment_terminator: "\n"
+header:
+    DESADV_D_96A_UN_EAN005: []
+    BGM: ['!value', '351', !!python/tuple ['9', '31']]
+    DTM: ['!value']
+    RFF: ['ON', '!value']
+detail:
+    CPS: ['!value', !!python/tuple ['', '!value']]
+    LIN: ['!value', 'EN', '!value']
+    #PIALIN: ['IN', '!value']
+    IMDLIN: [!!python/tuple ['C', 'F']]
+    QTYLIN: [!!python/tuple ['12', '59', '192', '21'], '!value']
+    PCILIN: ['36E']
+    #DTMLIN: ['!value']
+    #MOALIN: ['!value', '!value']
+    #QVRLIN: ['!value', '21', !!python/tuple ['AA', 'AB', 'AD', 'AS', 'BK', 'BP', 'CP', 'CN', 'PS', 'OS', 'OW', 'TW'], !!python/tuple ['AIT', 'AUE', 'AV', 'AQ', 'IS', 'PC', 'UM', 'VW']]
+    #PRILIN: [!!python/tuple ['AAA', 'NTP'], '!value', !!python/tuple ['!value', '']]
+    #RFFLIN: ['LI', '!value']
