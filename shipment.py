@@ -91,7 +91,6 @@ class ShipmentIn(EdifactMixin):
         # means the file readed it's not a order response.
         if not message.get_segment('DESADV_D_96A_UN_EAN005'):
             return DO_NOTHING, NO_ERRORS
-
         rff = message.get_segment('RFF')
         template_rff = template_header.get('RFF')
         purchase, errors = cls._process_RFF(rff, template_rff, control_chars)
@@ -136,7 +135,6 @@ class ShipmentIn(EdifactMixin):
             segments_iterator = RewindIterator(cps_group)
             linegroups = [x for x in separate_section(segments_iterator,
                 start='LIN')]
-            found_cps_level = False
             for linegroup in linegroups:
                 values = {}
                 for segment in linegroup:
@@ -161,9 +159,8 @@ class ShipmentIn(EdifactMixin):
                 quantity = values.get('quantity')
                 matching_moves = None
                 if product:
-                    found_cps_level = True
                     matching_moves = [m for m in shipment.pending_moves if
-                        m.product == product and m.pending_quantity > 0]
+                        (m.product == product) and (m.pending_quantity > 0)]
                     if matching_moves:
                         move = matching_moves[0]
                     else:
@@ -198,8 +195,6 @@ class ShipmentIn(EdifactMixin):
                     move.lot = lot
                 to_save.append(move)
 
-            if found_cps_level:
-                break
         if to_save:
             Move.save(to_save)
         return shipment, total_errors
