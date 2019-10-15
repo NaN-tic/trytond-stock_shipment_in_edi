@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# This file is part working_shift_contract module for Tryton.
+# This file is part stock_shipment_in_edi module for Tryton.
 # The COPYRIGHT file at the top level of this repository contains
 # the full copyright notices and license terms.
 
