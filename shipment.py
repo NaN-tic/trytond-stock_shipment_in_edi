@@ -91,7 +91,8 @@ class ShipmentIn(EdifactMixin):
         # means the file readed it's not a order response.
         if not message.get_segment('DESADV_D_96A_UN_EAN005'):
             return DO_NOTHING, NO_ERRORS
-        rff = message.get_segment('RFF')
+        rffs = message.get_segments('RFF')
+        rff, = [x for x in rffs if x.elements[0] == 'ON'] or [None]
         template_rff = template_header.get('RFF')
         purchase, errors = cls._process_RFF(rff, template_rff, control_chars)
         if errors:
