@@ -5,7 +5,7 @@ header:
     DESADV_D_96A_UN_EAN005: []
     BGM: ['!value', '351', !!python/tuple ['9', '31']]
     DTM: ['!value']
-    RFF: ['ON', '!value']
+    RFF: [!!python/tuple ['ON', 'DQ'], '!value']
 detail:
     CPS: ['!value', !!python/tuple ['', '!value']]
     LIN: ['!value', 'EN', '!value']
