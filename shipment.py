@@ -12,6 +12,7 @@ from trytond.modules.edocument_unedifact.edocument import (Message, Serializer)
 from trytond.modules.edocument_unedifact.edocument import (with_segment_check,
     separate_section, RewindIterator, DO_NOTHING, NO_ERRORS)
 from datetime import datetime
+from trytond.error import UserError
 
 
 __all__ = ['Move', 'StockConfiguration', 'ShipmentIn']
@@ -197,7 +198,12 @@ class ShipmentIn(EdifactMixin):
                 to_save.append(move)
 
         if to_save:
-            Move.save(to_save)
+            try:
+                Move.save(to_save)
+            except UserError as e:
+                total_errors.append(e.message)
+                return None, total_errors
+
         return shipment, total_errors
 
     @classmethod
