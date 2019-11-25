@@ -243,7 +243,7 @@ class ShipmentIn(EdifactMixin, metaclass=PoolMeta):
     @classmethod
     @with_segment_check
     def _process_BGM(cls, segment, template, control_chars=None):
-        return segment.elements[2], NO_ERRORS
+        return segment.elements[0], NO_ERRORS
 
     @classmethod
     @with_segment_check
