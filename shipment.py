@@ -105,7 +105,7 @@ class ShipmentIn(EdifactMixin):
         shipment.supplier = purchase.party
         shipment.on_change_supplier()
         shipment.warehouse = purchase.warehouse
-        shipment.moves = purchase.moves
+        shipment.moves = purchase.pending_moves
 
         dtm = message.get_segment('DTM')
         template_dtm = template_header.get('DTM')
