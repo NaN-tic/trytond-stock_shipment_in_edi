@@ -8,8 +8,9 @@ import os
 from trytond.modules.stock.move import STATES as MOVE_STATES
 from trytond.modules.edocument_unedifact.edocument import (EdifactMixin,
     UOMS_EDI_TO_TRYTON, EdiTemplate)
-from trytond.modules.edocument_unedifact.edocument import (Message, Serializer)
-from trytond.modules.edocument_unedifact.edocument import (with_segment_check,
+from edifact.message import Message
+from edifact.serializer import Serializer
+from edifact.utils import (with_segment_check, validate_segment,
     separate_section, RewindIterator, DO_NOTHING, NO_ERRORS)
 from datetime import datetime
 from trytond.exceptions import UserError
