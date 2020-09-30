@@ -13,7 +13,6 @@ from edifact.serializer import Serializer
 from edifact.utils import (with_segment_check, validate_segment,
     separate_section, RewindIterator, DO_NOTHING, NO_ERRORS)
 from datetime import datetime
-from trytond.exceptions import UserError
 
 
 __all__ = ['Move', 'StockConfiguration', 'ShipmentIn', 'Cron']
@@ -61,8 +60,10 @@ class ShipmentIn(EdifactMixin, metaclass=PoolMeta):
             if product:
                 move = Move()
                 move.product = product
+                move.on_change_product()
                 move.quantity = quantity
-                move.uom = values.get('unit')
+                if values.get('unit'):
+                    move.uom = values.get('unit')
                 move.state = 'draft'
                 move.company = purchase.company
                 move.currency = purchase.currency
@@ -169,6 +170,8 @@ class ShipmentIn(EdifactMixin, metaclass=PoolMeta):
 
                 product = scannable_products.get(values.get('product'))
                 quantity = values.get('quantity')
+                if not quantity:
+                    continue
                 matching_moves = None
                 if product:
                     matching_moves = [m for m in shipment.pending_moves if
@@ -188,11 +191,12 @@ class ShipmentIn(EdifactMixin, metaclass=PoolMeta):
                 move.edi_quantity = quantity
                 move.edi_description = values.get('description')
                 if hasattr(Move, 'lot'):
-                    lot, = Lot.search([
+                    lots = Lot.search([
                             ('number', '=', values.get('lot')),
                             ('product', '=', move.product)
-                            ], limit=1) or [None]
-                    if lot:
+                            ], limit=1)
+                    if lots:
+                        lot, = lots
                         expiry_date = values.get('expiry_date')
                         if expiry_date and lot.expiry_date:
                             if expiry_date < lot.expiry_date:
@@ -208,11 +212,7 @@ class ShipmentIn(EdifactMixin, metaclass=PoolMeta):
                 to_save.append(move)
 
         if to_save:
-            try:
-                Move.save(to_save)
-            except UserError as e:
-                total_errors.append(e.message)
-                return None, total_errors
+            Move.save(to_save)
 
         return shipment, total_errors
 
