@@ -48,13 +48,25 @@ class Move(metaclass=PoolMeta):
         default.setdefault('edi_description')
         return super(Move, cls).copy(records, default=default)
 
+    def _get_new_lot(self, values, expiration):
+        pool = Pool()
+        Lot = pool.get('stock.lot')
+
+        today = datetime.today().date()
+        lot = Lot()
+        lot.number = values.get('lot') or today.isoformat()
+        lot.product = self.product
+        if ((not expiration or expiration != 'none')
+                and values.get('expiration_date', False)):
+            lot.expiration_date = values.get('expiration_date')
+        return lot
+
 
 class ShipmentIn(EdifactMixin, metaclass=PoolMeta):
     __name__ = 'stock.shipment.in'
 
     @classmethod
     def import_edi_input(cls, response, template):
-
         def get_new_move():
             move = None
             if product:
@@ -85,6 +97,7 @@ class ShipmentIn(EdifactMixin, metaclass=PoolMeta):
 
         pool = Pool()
         ProductCode = pool.get('product.code')
+        Template = pool.get('product.template')
         Move = pool.get('stock.move')
         Lot = pool.get('stock.lot')
 
@@ -190,25 +203,27 @@ class ShipmentIn(EdifactMixin, metaclass=PoolMeta):
                     move = get_new_move()
                 move.edi_quantity = quantity
                 move.edi_description = values.get('description')
-                if hasattr(Move, 'lot'):
+                if hasattr(Template, 'lot_required') and product.lot_required:
+                    expiration = None
+                    if hasattr(Template, 'expiration_state'):
+                        expiration = product.expiration_state
                     lots = Lot.search([
                             ('number', '=', values.get('lot')),
                             ('product', '=', move.product)
                             ], limit=1)
                     if lots:
                         lot, = lots
-                        expiry_date = values.get('expiry_date')
-                        if expiry_date and lot.expiry_date:
-                            if expiry_date < lot.expiry_date:
-                                lot.expiry_date = expiry_date
+                        if ((not expiration or expiration != 'none')
+                                and values.get('expiration_date', False)):
+                            expiration_date = values.get('expiration_date')
+                            if expiration_date and lot.expiration_date:
+                                if expiration_date < lot.expiration_date:
+                                    lot.expiration_date = expiration_date
                     else:
-                        today = datetime.today().date()
-                        lot = Lot()
-                        lot.number = values.get('lot') or today.isoformat()
-                        lot.product = product
-                        lot.expiry_date = values.get('expiry_date')
-                    lot.save()
-                    move.lot = lot
+                        lot = move._get_new_lot(values, expiration)
+                    if lot:
+                        lot.save()
+                        move.lot = lot
                 to_save.append(move)
 
         if to_save:
@@ -280,11 +295,12 @@ class ShipmentIn(EdifactMixin, metaclass=PoolMeta):
     @with_segment_check
     def _process_PCILIN(cls, segment, template):
         elements_lenght = len(segment.elements)
-        expiry_date = (cls.get_datetime_obj_from_edi_date(
+        expiration_date = (cls.get_datetime_obj_from_edi_date(
                 segment.elements[1]) if elements_lenght > 1 else None)
         lot = segment.elements[7] if elements_lenght > 6 else None
         result = {
-            'expiry_date': expiry_date.date() if expiry_date else None,
+            'expiration_date': (expiration_date.date() if expiration_date
+                else None),
             'lot': lot
             }
         return result, NO_ERRORS
