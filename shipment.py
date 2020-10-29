@@ -242,6 +242,13 @@ class ShipmentIn(EdifactMixin, metaclass=PoolMeta):
                 ('state', 'in', ('processing', 'done'))
                 ], limit=1) or [None]
         if not purchase:
+            purchases = Purchase.search([
+                    ('reference', '=', purchase_num),
+                    ('state', 'in', ('processing', 'done'))
+                    ])
+            if len(purchases) == 1:
+                purchase = purchase[0]
+        if not purchase:
             error_msg = 'Purchase number {} not found'.format(purchase_num)
             serialized_segment = Serializer(control_chars).serialize([segment])
             return DO_NOTHING, ['{}: {}'.format(error_msg, serialized_segment)]
