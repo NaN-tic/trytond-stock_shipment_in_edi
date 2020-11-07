@@ -74,14 +74,15 @@ class ShipmentIn(EdifactMixin, metaclass=PoolMeta):
 
     @classmethod
     def import_edi_input(cls, response, template):
-
         def get_new_move():
             move = None
             if product:
                 move = Move()
                 move.product = product
+                move.on_change_product()
                 move.quantity = quantity
-                move.uom = values.get('unit')
+                if values.get('unit'):
+                    move.uom = values.get('unit')
                 move.state = 'draft'
                 move.company = purchase.company
                 move.currency = purchase.currency
@@ -103,6 +104,7 @@ class ShipmentIn(EdifactMixin, metaclass=PoolMeta):
 
         pool = Pool()
         ProductCode = pool.get('product.code')
+        Template = pool.get('product.template')
         Move = pool.get('stock.move')
         Lot = pool.get('stock.lot')
 
@@ -197,6 +199,8 @@ class ShipmentIn(EdifactMixin, metaclass=PoolMeta):
 
                 product = scannable_products.get(values.get('product'))
                 quantity = values.get('quantity')
+                if not quantity:
+                    continue
                 matching_moves = None
                 if product:
                     matching_moves = [m for m in shipment.pending_moves if
@@ -215,32 +219,31 @@ class ShipmentIn(EdifactMixin, metaclass=PoolMeta):
                     move = get_new_move()
                 move.edi_quantity = quantity
                 move.edi_description = values.get('description')
-                if hasattr(Move, 'lot'):
-                    lot, = Lot.search([
+                if hasattr(Template, 'lot_required') and product.lot_required:
+                    expiration = None
+                    if hasattr(Template, 'expiration_state'):
+                        expiration = product.expiration_state
+                    lots = Lot.search([
                             ('number', '=', values.get('lot')),
                             ('product', '=', move.product)
-                            ], limit=1) or [None]
-                    if lot:
-                        expiry_date = values.get('expiry_date')
-                        if expiry_date and lot.expiry_date:
-                            if expiry_date < lot.expiry_date:
-                                lot.expiry_date = expiry_date
+                            ], limit=1)
+                    if lots:
+                        lot, = lots
+                        if ((not expiration or expiration != 'none')
+                                and values.get('expiration_date', False)):
+                            expiration_date = values.get('expiration_date')
+                            if expiration_date and lot.expiration_date:
+                                if expiration_date < lot.expiration_date:
+                                    lot.expiration_date = expiration_date
                     else:
-                        today = datetime.today().date()
-                        lot = Lot()
-                        lot.number = values.get('lot') or today.isoformat()
-                        lot.product = product
-                        lot.expiry_date = values.get('expiry_date')
-                    lot.save()
-                    move.lot = lot
+                        lot = move._get_new_lot(values, expiration)
+                    if lot:
+                        lot.save()
+                        move.lot = lot
                 to_save.append(move)
 
         if to_save:
-            try:
-                Move.save(to_save)
-            except UserError as e:
-                total_errors.append(e.message)
-                return None, total_errors
+            Move.save(to_save)
 
         return shipment, total_errors
 
@@ -271,6 +274,13 @@ class ShipmentIn(EdifactMixin, metaclass=PoolMeta):
             if len(purchases) == 1:
                 purchase = purchases[0]
 
+        if not purchase:
+            purchases = Purchase.search([
+                    ('reference', '=', purchase_num),
+                    ('state', 'in', ('processing', 'done'))
+                    ])
+            if len(purchases) == 1:
+                purchase = purchases[0]
         if not purchase:
             error_msg = 'Purchase number {} not found'.format(purchase_num)
             serialized_segment = Serializer(control_chars).serialize([segment])
@@ -325,11 +335,12 @@ class ShipmentIn(EdifactMixin, metaclass=PoolMeta):
     @with_segment_check
     def _process_PCILIN(cls, segment, template):
         elements_lenght = len(segment.elements)
-        expiry_date = (cls.get_datetime_obj_from_edi_date(
+        expiration_date = (cls.get_datetime_obj_from_edi_date(
                 segment.elements[1]) if elements_lenght > 1 else None)
         lot = segment.elements[7] if elements_lenght > 6 else None
         result = {
-            'expiry_date': expiry_date.date() if expiry_date else None,
+            'expiration_date': (expiration_date.date() if expiration_date
+                else None),
             'lot': lot
             }
         return result, NO_ERRORS
