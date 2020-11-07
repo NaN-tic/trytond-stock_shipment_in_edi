@@ -13,9 +13,13 @@ from edifact.serializer import Serializer
 from edifact.utils import (with_segment_check, validate_segment,
     separate_section, RewindIterator, DO_NOTHING, NO_ERRORS)
 from datetime import datetime
+import logging
 
 
 __all__ = ['Move', 'StockConfiguration', 'ShipmentIn', 'Cron']
+
+
+logger = logging.getLogger('stock_shipment_in_edi')
 
 DEFAULT_FILES_LOCATION = '/tmp/'
 MODULE_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -59,6 +63,8 @@ class Move(metaclass=PoolMeta):
         if ((not expiration or expiration != 'none')
                 and values.get('expiration_date', False)):
             lot.expiration_date = values.get('expiration_date')
+        else:
+            lot.on_change_product()
         return lot
 
 
@@ -115,7 +121,10 @@ class ShipmentIn(EdifactMixin, metaclass=PoolMeta):
         # If there isn't a segment DESADV_D_96A_UN_EAN005
         # means the file readed it's not a order response.
         if not message.get_segment('DESADV_D_96A_UN_EAN005'):
+            logger.error("File %s processed is not shipment with header: "
+                "DESADV_D_96A_UN_EAN005")
             return DO_NOTHING, NO_ERRORS
+
         rffs = message.get_segments('RFF')
         rff, = [x for x in rffs if x.elements[0] == 'ON'] or [None]
         template_rff = template_header.get('RFF')
@@ -124,6 +133,12 @@ class ShipmentIn(EdifactMixin, metaclass=PoolMeta):
             total_errors += errors
         if not purchase:
             return None, total_errors
+
+        if purchase and purchase.shipments:
+            logger.error("Purchase has a shipment, do not search for reference"
+                "on shipment")
+            return DO_NOTHING, NO_ERRORS
+
 
         shipment = cls()
         shipment.supplier = purchase.party
@@ -236,11 +251,21 @@ class ShipmentIn(EdifactMixin, metaclass=PoolMeta):
     def _process_RFF(cls, segment, template_segment, control_chars=None):
         pool = Pool()
         Purchase = pool.get('purchase.purchase')
+        Config = pool.get('purchase.configuration')
         purchase_num = segment.elements[1]
+
+        padding = (Config(1).purchase_sequence and
+        Config(1).purchase_sequence.padding - len(purchase_num))
+
+        if padding:
+            purchase_num = "0"*padding + purchase_num
+
         purchase, = Purchase.search([
                 ('number', '=', purchase_num),
                 ('state', 'in', ('processing', 'done'))
                 ], limit=1) or [None]
+
+
         if not purchase:
             purchases = Purchase.search([
                     ('reference', '=', purchase_num),
