@@ -45,18 +45,25 @@ class ShipmentIn(EdifactMixin):
 
     @classmethod
     def import_edi_input(cls, response, template):
+        pool = Pool()
+        ProductCode = pool.get('product.code')
+        Move = pool.get('stock.move')
+        Lot = pool.get('stock.lot')
+
+        default_values = cls.default_get(cls._fields.keys(),
+                with_rec_name=False)
+        move_default_values = Move.default_get(Move._fields.keys(),
+                with_rec_name=False)
 
         def get_new_move():
-            move = None
             if product:
-                move = Move()
+                move = Move(**move_default_values)
                 move.product = product
                 move.on_change_product()
                 move.quantity = quantity
                 if values.get('unit'):
                     move.uom = values.get('unit')
                 move.state = 'draft'
-                move.company = purchase.company
                 move.currency = purchase.currency
                 move.planned_date = shipment.planned_date
                 move.unit_price = product.list_price
@@ -73,11 +80,6 @@ class ShipmentIn(EdifactMixin):
                 else:
                     move.to_location = purchase.party.supplier_location.id
             return move
-
-        pool = Pool()
-        ProductCode = pool.get('product.code')
-        Move = pool.get('stock.move')
-        Lot = pool.get('stock.lot')
 
         total_errors = []
         control_chars = cls.set_control_chars(
@@ -103,7 +105,7 @@ class ShipmentIn(EdifactMixin):
         if not purchase:
             return None, total_errors
 
-        shipment = cls()
+        shipment = cls(**default_values)
         shipment.supplier = purchase.party
         shipment.on_change_supplier()
         shipment.warehouse = purchase.warehouse
@@ -179,6 +181,10 @@ class ShipmentIn(EdifactMixin):
                         continue
                     product = product_code.product
                     move = get_new_move()
+
+                if not move:
+                    continue
+
                 move.edi_quantity = quantity
                 move.edi_description = values.get('description')
                 if hasattr(Move, 'lot'):
