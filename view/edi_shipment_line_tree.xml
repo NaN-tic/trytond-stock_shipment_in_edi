@@ -1,0 +1,10 @@
+<tree>
+    <field name="line_number"/>
+    <field name="code"/>
+    <field name="code_type"/>
+    <field name="product"/>
+    <field name="lot_number"/>
+    <field name="description_type"/>
+    <field name="description"/>
+    <field name="expiration_date"/>
+</tree>

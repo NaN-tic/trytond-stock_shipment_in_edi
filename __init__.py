@@ -2,10 +2,16 @@
 # copyright notices and license terms.
 from trytond.pool import Pool
 from . import shipment
-
+from . import edi_shipment
 
 def register():
     Pool.register(
+        edi_shipment.Cron,
+        edi_shipment.SupplierEdi,
+        edi_shipment.EdiShipmentReference,
+        edi_shipment.EdiShipmentInLine,
+        edi_shipment.EdiShipmentIn,
+        edi_shipment.EdiShipmentInLineQty,
         shipment.Cron,
         shipment.Move,
         shipment.ShipmentIn,
