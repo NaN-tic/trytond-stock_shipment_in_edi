@@ -12,8 +12,5 @@ def register():
         edi_shipment.EdiShipmentInLine,
         edi_shipment.EdiShipmentIn,
         edi_shipment.EdiShipmentInLineQty,
-        shipment.Cron,
-        shipment.Move,
-        shipment.ShipmentIn,
-        shipment.StockConfiguration,
+        edi_shipment.StockConfiguration,
         module='stock_shipment_in_edi', type_='model')

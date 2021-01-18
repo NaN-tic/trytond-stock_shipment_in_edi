@@ -8,10 +8,10 @@ from trytond.transaction import Transaction
 import os
 from trytond.modules.account_invoice_edi.invoice import (SupplierEdiMixin,
     SUPPLIER_TYPE)
-# from trytond.exceptions import UserError, UserWarning
-# from trytond.i18n import gettext
 from datetime import datetime
 from decimal import Decimal
+from trytond.i18n import gettext
+from trytond.exceptions import UserError
 
 DEFAULT_FILES_LOCATION = '/tmp/'
 MODULE_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -43,6 +43,12 @@ class Cron(metaclass=PoolMeta):
             ('edi.shipment.in|import_shipment_in',
             'Import EDI Shipment In Orders')])
 
+class StockConfiguration(metaclass=PoolMeta):
+    __name__ = 'stock.configuration'
+
+    inbox_path_edi = fields.Char('Inbox Path EDI')
+
+
 class SupplierEdi(SupplierEdiMixin, ModelSQL, ModelView):
     'Supplier Edi'
     __name__ = 'edi.shipment.supplier'
@@ -51,7 +57,7 @@ class SupplierEdi(SupplierEdiMixin, ModelSQL, ModelView):
 
 
 class EdiShipmentReference(ModelSQL, ModelView):
-    'Account Invoice Reference'
+    'Shipment In Reference'
     __name__ = 'edi.shipment.in.reference'
 
     # RFF, RFFLIN
@@ -165,8 +171,8 @@ class EdiShipmentInLine(ModelSQL, ModelView):
         'Dimension', readonly=True)
     dimension_unit = fields.Selection([('', ''), ('CEL', 'Celsius Degrees')],
         'Dimension Unit', readonly=True)
-    dimension_qualifier = fields.Selection([('', ''), ('SO', 'Storage Limiet')],
-        'Storage Limiet', readonly=True)
+    dimension_qualifier = fields.Selection([('', ''), ('SO', 'Storage Limit')],
+        'Storage Limit', readonly=True)
     dimension_min = fields.Numeric('Min', readonly=True)
     dimension_max = fields.Numeric('Max', readonly=True)
     marking_instructions = fields.Selection([('', ''),
@@ -283,7 +289,7 @@ class EdiShipmentInLine(ModelSQL, ModelView):
             for move in purchase.moves:
                 if move.product == product:
                     ref = REF()
-                    ref.type_ = 'move'
+                    ref.type_ = 'ON'
                     ref.origin = 'stock.move,%s ' % move.id
                     self.references += (ref,)
 
@@ -305,6 +311,7 @@ class EdiShipmentInLineQty(ModelSQL, ModelView):
     edi_shipment_line = fields.Many2One('edi.shipment.in.line', 'Shipment Line',
         readonly=True)
 
+
 class EdiShipmentIn(ModelSQL, ModelView):
     'Edi shipment In'
     __name__ = 'edi.shipment.in'
@@ -324,14 +331,14 @@ class EdiShipmentIn(ModelSQL, ModelView):
         'Supplier', readonly=True)
     manual_party = fields.Many2One('party.party', 'Manual Party')
     shipment = fields.Many2One('stock.shipment.in', 'Shipment')
-    party = fields.Function(fields.Many2One('party.party', 'Invoice Party'),
+    party = fields.Function(fields.Many2One('party.party', 'Shipment Party'),
         'get_party', searcher='search_party')
 
     @classmethod
     def __setup__(cls):
         super().__setup__()
         cls._buttons.update({
-            'create_shipments': {},
+            'create_shipment': {},
             'search_references': {}
         })
 
@@ -412,18 +419,24 @@ class EdiShipmentIn(ModelSQL, ModelView):
         # Not implemented
         pass
 
+    def get_quantity(line):
+        for qty in line.quantities:
+           if qty.type_ == '12':
+               return float(qty.quantity)
+
+
     @classmethod
     def import_edi_file(cls, shipments, data):
         pool = Pool()
-        Shipment = pool.get('edi.shipment.in')
-        Line = pool.get('edi.shipment.in.line')
+        ShipmentEdi = pool.get('edi.shipment.in')
+        ShipmentEdiLine = pool.get('edi.shipment.in.line')
         SupplierEdi = pool.get('edi.shipment.supplier')
         # Configuration = pool.get('stock.configuration')
 
         # config = Configuration(1)
         separator = '|'  # TODO config.separator
 
-        shipment = None
+        shipment_edi = None
         shipment_line = None
         document_type = data.pop(0).replace('\n', '').replace('\r', '')
         if document_type != 'DESADV_D_96A_UN_EAN005':
@@ -433,32 +446,32 @@ class EdiShipmentIn(ModelSQL, ModelView):
             line = line.split(separator)
             msg_id = line.pop(0)
             if msg_id == 'BGM':
-                shipment = Shipment()
-                shipment.read_BGM(line)
+                shipment_edi = ShipmentEdi()
+                shipment_edi.read_BGM(line)
             elif msg_id == 'LIN':
                 # if shipment_line:
                 #     shipment_line.search_related(shipment)
-                shipment_line = Line()
-                shipment_line.read_LIN(line)
-                if not getattr(shipment, 'lines', False):
-                    shipment.lines = []
-                shipment.lines += (shipment_line,)
+                shipment_edi_line = ShipmentEdiLine()
+                shipment_edi_line.read_LIN(line)
+                if not getattr(shipment_edi, 'lines', False):
+                    shipment_edi.lines = []
+                shipment_edi.lines += (shipment_edi_line,)
             elif 'LIN' in msg_id:
-                getattr(shipment_line, 'read_%s' % msg_id)(line)
+                getattr(shipment_edi_line, 'read_%s' % msg_id)(line)
             elif msg_id in [x[0] for x in SUPPLIER_TYPE]:
                 supplier = SupplierEdi()
                 getattr(supplier, 'read_%s' % msg_id)(line)
                 supplier.search_party()
-                if not getattr(shipment, 'suppliers', False):
-                    shipment.suppliers = []
-                shipment.suppliers += (supplier,)
+                if not getattr(shipment_edi, 'suppliers', False):
+                    shipment_edi.suppliers = []
+                shipment_edi.suppliers += (supplier,)
             elif 'NAD' in msg_id:
                 continue
             else:
-                getattr(shipment, 'read_%s' % msg_id)(line)
+                getattr(shipment_edi, 'read_%s' % msg_id)(line)
 
         # invoice_line.search_related(shipment)
-        return shipment
+        return shipment_edi
 
     def add_attachment(self, attachment, filename=None):
         pool = Pool()
@@ -490,7 +503,6 @@ class EdiShipmentIn(ModelSQL, ModelView):
             if fname[-4:].lower() not in KNOWN_EXTENSIONS:
                 continue
             with open(fname, 'r', encoding='latin-1') as fp:
-                print("fname:", fname)
                 data = fp.readlines()
                 shipment = cls.import_edi_file([], data)
 
@@ -507,11 +519,23 @@ class EdiShipmentIn(ModelSQL, ModelView):
         #     for shipment, (data, basename) in attachments.items():
         #         shipment.add_attachment(data, basename)
 
-        # if files_to_delete:
-        #     for file in files_to_delete:
-        #         os.remove(file)
+        if files_to_delete:
+            for file in files_to_delete:
+                os.remove(file)
 
         cls.search_references(to_save)
+
+    def _get_new_lot(self, line, quantity):
+        pool = Pool()
+        Lot = pool.get('stock.lot')
+
+        if line.expiration_date:
+            today = datetime.today().date()
+            lot = Lot()
+            lot.product = line.product
+            lot.expiration_date = line.expiration_date
+            lot.on_change_product()
+            return lot
 
     @classmethod
     @ModelView.button
@@ -525,3 +549,67 @@ class EdiShipmentIn(ModelSQL, ModelView):
                 eline.search_related(edi_shipment)
                 to_save.append(eline)
         Line.save(to_save)
+
+    @classmethod
+    @ModelView.button
+    def create_shipment(cls, edi_shipments):
+        ShipmentIn = Pool().get('stock.shipment.in')
+        Move = Pool().get('stock.move')
+        Lot = Pool().get('stock.lot')
+        Purchase = Pool().get('purchase.purchase')
+
+        to_save = []
+        move_to_save = []
+        for edi_shipment in edi_shipments:
+            if edi_shipment.shipment:
+                continue
+
+            shipment = ShipmentIn()
+            for reference in edi_shipment.references:
+                if reference.type_ == 'ON' and reference.origin:
+                    if isinstance(reference.origin, Purchase):
+                        shipment.warehouse = reference.origin.warehouse
+                        break
+
+                if reference.type_ == 'ON' and not reference.origin:
+                    raise UserError(gettext(
+                                'stock_shipment_in_edi.msg_no_purchase_ref'))
+
+            shipment.reference = edi_shipment.number
+            shipment.supplier = edi_shipment.party.id
+            edi_shipment.shipment = shipment
+            for line in edi_shipment.lines:
+                if not line.product:
+                    raise UserError(gettext(
+                            'stock_shipment_in_edi.msg_no_product',
+                            number=line.line_number))
+
+                if not line.references:
+                    raise UserError(gettext(
+                            'stock_shipment_in_edi.msg_no_move_ref',
+                            number=line.line_number))
+
+                for ref in line.references:
+                    if ref.origin not in move_to_save:
+                        quantity = cls.get_quantity(line)
+                        move = ref.origin
+                        move.shipment = shipment
+                        move.quantity = quantity
+                        move.lot = cls._get_new_lot(cls, line, quantity)
+                        move_to_save.append(move)
+                    else:
+                        quantity = cls.get_quantity(line)
+                        move, = ref.origin.copy([ref.origin])
+                        move.shipment = shipment
+                        move.quantity = quantity
+                        move.lot = cls._get_new_lot(cls, line, quantity)
+                        move_to_save.append(move)
+
+            edi_shipment.save()
+            to_save.append(shipment)
+
+        if to_save:
+            ShipmentIn.save(to_save)
+
+        if move_to_save:
+            Move.save(move_to_save)
