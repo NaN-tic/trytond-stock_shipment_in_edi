@@ -19,15 +19,15 @@
     <field name="expedition_date"/>
     <label name="estimated_date"/>
     <field name="estimated_date"/>
-<notebook colspan="8">
-    <page id="references" string="Parties">
-      <field name="references" colspan="2"/>
-      <field name="suppliers" colspan="2"/>
-    </page>
-    <page id="lines" string="Lines">
-      <field name="lines" colspan="6"/>
-    </page>
-</notebook>
-    <button string="Create Shipment" name="create_shipment"/>
-    <button string="Search References" name="search_references"/>
+    <notebook colspan="8">
+      <page id="references" string="Parties">
+        <field name="references" colspan="2"/>
+        <field name="suppliers" colspan="2"/>
+      </page>
+      <page id="lines" string="Lines">
+        <field name="lines" colspan="6"/>
+      </page>
+    </notebook>
+    <button name="create_shipment"/>
+    <button name="search_references"/>
 </form>

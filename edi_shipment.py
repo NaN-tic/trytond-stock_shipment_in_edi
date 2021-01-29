@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*
 # The COPYRIGHT file at the top level of this repository contains the full
 # copyright notices and license terms.
 from trytond.model import fields, ModelSQL, ModelView
 from trytond.pool import Pool, PoolMeta
-# from trytond.pyson import Eval, Bool, Or
 from trytond.transaction import Transaction
 import os
 from trytond.modules.account_invoice_edi.invoice import (SupplierEdiMixin,
@@ -43,6 +41,7 @@ class Cron(metaclass=PoolMeta):
             ('edi.shipment.in|import_shipment_in',
             'Import EDI Shipment In Orders')])
 
+
 class StockConfiguration(metaclass=PoolMeta):
     __name__ = 'stock.configuration'
 
@@ -61,8 +60,12 @@ class EdiShipmentReference(ModelSQL, ModelView):
     __name__ = 'edi.shipment.in.reference'
 
     # RFF, RFFLIN
-    type_ = fields.Selection([('', ''), ('DQ', 'Shipment'), ('ON', 'Purchase'),
-        ('LI', 'Line Number'), ('VN', 'VN')],
+    type_ = fields.Selection([
+        (None, ''),
+        ('DQ', 'Shipment'),
+        ('ON', 'Purchase'),
+        ('LI', 'Line Number'),
+        ('VN', 'VN')],
         'Reference Code')
     reference = fields.Char('Reference')
     reference_date = fields.Date('Reference Date', readonly=True)
@@ -75,9 +78,11 @@ class EdiShipmentReference(ModelSQL, ModelView):
     @classmethod
     def get_resource(cls):
         'Return list of Model names for resource Reference'
-        return [(None, ''), ('stock.shipment.in', 'Shipment'),
-            ('purchase.purchase', 'Purchase'),
-            ('purchase.line', 'Line'), ('stock.move', 'Move')]
+        return [(None, ''),
+                ('stock.shipment.in', 'Shipment'),
+                ('purchase.purchase', 'Purchase'),
+                ('purchase.line', 'Line'),
+                ('stock.move', 'Move')]
 
     def read_message(self, message):
         message.pop(0)
@@ -97,9 +102,8 @@ class EdiShipmentReference(ModelSQL, ModelView):
 
         Model = Pool().get(model)
         res = Model.search([('number', '=', self.reference)], limit=1)
-        self.origin = None
-        if res != []:
-            self.origin = res[0]
+        self.origin = res[0] if res else None
+
 
 # class EdiShipmentInTransport(ModelSQL, ModelView):
 #     'Edi Shipment in Transport'
@@ -153,31 +157,48 @@ class EdiShipmentInLine(ModelSQL, ModelView):
     __name__ = 'edi.shipment.in.line'
     # LIN, PIALIN, IMDLIN, MEALIN, PCILIN
     code = fields.Char('Code', readonly=True)
-    code_type = fields.Selection([('', ''), ('EAN8', 'EAN8'),
-        ('EAN13', 'EAN13'), ('EAN14', 'EAN14'), ('DUN14', 'DUN14'),
-        ('EN', 'EN')], 'Code Type')
+    code_type = fields.Selection([
+        (None, ''),
+        ('EAN8', 'EAN8'),
+        ('EAN13', 'EAN13'),
+        ('EAN14', 'EAN14'),
+        ('DUN14', 'DUN14'),
+        ('EN', 'EN')],
+        'Code Type')
     line_number = fields.Integer('Line Number', readonly=True)
     purchaser_code = fields.Char('Purchaser Code', readonly=True)
     supplier_code = fields.Char('Supplier Code', readonly=True)
     serial_number = fields.Char('Serial Number', readonly=True)
     lot_number = fields.Char('Lot Number', readonly=True)
-    description_type = fields.Selection([('', ''), ('F', 'Free Description'),
-        ('C', 'Codificated Description')], 'Type of Description',
-        readonly=True)
+    description_type = fields.Selection([
+        (None, ''),
+        ('F', 'Free Description'),
+        ('C', 'Codificated Description')],
+        'Type of Description', readonly=True)
     description = fields.Char('Description', readonly=True)
-    desccod = fields.Selection([('', ''), ('CU', 'Consumption Unit'),
-        ('DU', 'Dispatch Unit')], 'Codification description', readonly=True)
-    dimension = fields.Selection([('', ''), ('TC', 'Temperature')],
+    desccod = fields.Selection([
+        (None, ''),
+        ('CU', 'Consumption Unit'),
+        ('DU', 'Dispatch Unit')],
+        'Codification description', readonly=True)
+    dimension = fields.Selection([
+        (None, ''),
+        ('TC', 'Temperature')],
         'Dimension', readonly=True)
-    dimension_unit = fields.Selection([('', ''), ('CEL', 'Celsius Degrees')],
+    dimension_unit = fields.Selection([
+        (None, ''),
+        ('CEL', 'Celsius Degrees')],
         'Dimension Unit', readonly=True)
-    dimension_qualifier = fields.Selection([('', ''), ('SO', 'Storage Limit')],
+    dimension_qualifier = fields.Selection([
+        (None, ''),
+        ('SO', 'Storage Limit')],
         'Storage Limit', readonly=True)
     dimension_min = fields.Numeric('Min', readonly=True)
     dimension_max = fields.Numeric('Max', readonly=True)
-    marking_instructions = fields.Selection([('', ''),
-        ('36E', 'Supplier Instructions')], 'Marking Instructions',
-        readonly=True)
+    marking_instructions = fields.Selection([
+        (None, ''),
+        ('36E', 'Supplier Instructions')],
+        'Marking Instructions', readonly=True)
     expiration_date = fields.Date('Expiration Date', readonly=True)
     packing_date = fields.Date('Packing Date', readonly=True)
     quantities = fields.One2Many('edi.shipment.in.line.qty',
@@ -219,7 +240,9 @@ class EdiShipmentInLine(ModelSQL, ModelView):
             self.dimension_max = message.pop(0)
 
     def read_QTYLIN(self, message):
-        QTY = Pool().get('edi.shipment.in.line.qty')
+        pool = Pool()
+        QTY = pool.get('edi.shipment.in.line.qty')
+
         qty = QTY()
         qty.type_ = message.pop(0)
         qty.quantity = to_decimal(message.pop(0), 4)
@@ -231,7 +254,9 @@ class EdiShipmentInLine(ModelSQL, ModelView):
         self.quantities += (qty, )
 
     def read_RFFLIN(self, message):
-        REF = Pool().get('edi.shipment.in.reference')
+        pool = Pool()
+        REF = pool.get('edi.shipment.in.reference')
+
         ref = REF()
         ref.type_ = message.pop(0)
         ref.reference = message.pop(0)
@@ -250,7 +275,9 @@ class EdiShipmentInLine(ModelSQL, ModelView):
             self.lot_number = message.pop(0)
 
     def read_QVRLIN(self, message):
-        QTY = Pool().get('edi.shipment.in.line.qty')
+        pool = Pool()
+        QTY = pool.get('edi.shipment.in.line.qty')
+
         qty = QTY()
         qty.type_ = message.pop(0)
         qty.quantity = to_decimal(message.pop(0), 4)
@@ -274,7 +301,8 @@ class EdiShipmentInLine(ModelSQL, ModelView):
     def search_related(self, edi_shipment):
         pool = Pool()
         Barcode = pool.get('product.code')
-        REF = Pool().get('edi.shipment.in.reference')
+        REF = pool.get('edi.shipment.in.reference')
+
         domain = [('number', '=', self.code)]
         barcode = Barcode.search(domain, limit=1)
         if not barcode:
@@ -283,7 +311,9 @@ class EdiShipmentInLine(ModelSQL, ModelView):
         self.product = product
 
         purchases = [x.origin for x in edi_shipment.references if
-            x.type_ == 'ON' and x.origin]
+            x.type_ == 'ON' and x.origin
+            and x.origin.__name__ == 'purchase.purchase']
+
         self.references = []
         for purchase in purchases:
             for move in purchase.moves:
@@ -298,16 +328,28 @@ class EdiShipmentInLineQty(ModelSQL, ModelView):
     'Edi Shipment in Line Qty'
     __name__ = 'edi.shipment.in.line.qty'
     # QTYLIN, QVRLIN
-    type_ = fields.Selection([('', ''), ('12', 'Quantity Sended'),
-        ('59', 'Quantity on package'), ('192', 'Free Quantity'),
-        ('21', '21'), ('45E', '45E')],
+    type_ = fields.Selection([
+        (None, ''),
+        ('12', 'Quantity Sended'),
+        ('59', 'Quantity on package'),
+        ('192', 'Free Quantity'),
+        ('21', '21'),
+        ('45E', '45E')],
         'Quantity Type', readonly=True)
     quantity = fields.Numeric('Quantity', readonly=True)
-    unit = fields.Selection([('', ''), ('KGM', 'Kilogramo'), ('GRM', 'Gramo'),
-        ('LTR', 'Litro'), ('PCE', 'Pieza'), ('EA', 'EA')], 'Unit',
-        readonly=True)
-    difference = fields.Selection([('', ''), ('BP', 'Partial Shipment'),
-        ('CP', 'Partial Shipment but Complete')], 'Difference', readonly=True)
+    unit = fields.Selection([
+        (None, ''),
+        ('KGM', 'Kilogramo'),
+        ('GRM', 'Gramo'),
+        ('LTR', 'Litro'),
+        ('PCE', 'Pieza'),
+        ('EA', 'EA')],
+        'Unit', readonly=True)
+    difference = fields.Selection([
+        (None, ''),
+        ('BP', 'Partial Shipment'),
+        ('CP', 'Partial Shipment but Complete')],
+        'Difference', readonly=True)
     edi_shipment_line = fields.Many2One('edi.shipment.in.line', 'Shipment Line',
         readonly=True)
 
@@ -318,10 +360,13 @@ class EdiShipmentIn(ModelSQL, ModelView):
 
     company = fields.Many2One('company.company', 'Company', readonly=True)
     number = fields.Char('Number')
-    type_ = fields.Selection([('351', 'Expedition Warning')],
+    type_ = fields.Selection([
+        ('351', 'Expedition Warning')],
         'Document Type')
-    function_ = fields.Selection([('9', 'Original'),
-        ('31', 'Copy')], 'Function Type')
+    function_ = fields.Selection([
+        ('9', 'Original'),
+        ('31', 'Copy')],
+        'Function Type')
     expedition_date = fields.Date('Expedition Date', readonly=True)
     estimated_date = fields.Date('Estimated Date', readonly=True)
     lines = fields.One2Many('edi.shipment.in.line', 'edi_shipment', 'Shipment')
@@ -341,6 +386,10 @@ class EdiShipmentIn(ModelSQL, ModelView):
             'create_shipment': {},
             'search_references': {}
         })
+
+    @staticmethod
+    def default_company():
+        return Transaction().context.get('company')
 
     @classmethod
     def search_party(cls, name, clause):
@@ -367,7 +416,9 @@ class EdiShipmentIn(ModelSQL, ModelView):
             self.estimated_date = to_date(message.pop(0))
 
     def read_RFF(self, message):
-        REF = Pool().get('edi.shipment.in.reference')
+        pool = Pool()
+        REF = pool.get('edi.shipment.in.reference')
+
         ref = REF()
         ref.type_ = message.pop(0)
         if message:
@@ -424,7 +475,6 @@ class EdiShipmentIn(ModelSQL, ModelView):
            if qty.type_ == '12':
                return float(qty.quantity)
 
-
     @classmethod
     def import_edi_file(cls, shipments, data):
         pool = Pool()
@@ -437,7 +487,6 @@ class EdiShipmentIn(ModelSQL, ModelView):
         separator = '|'  # TODO config.separator
 
         shipment_edi = None
-        shipment_line = None
         document_type = data.pop(0).replace('\n', '').replace('\r', '')
         if document_type != 'DESADV_D_96A_UN_EAN005':
             return
@@ -476,6 +525,7 @@ class EdiShipmentIn(ModelSQL, ModelView):
     def add_attachment(self, attachment, filename=None):
         pool = Pool()
         Attachment = pool.get('ir.attachment')
+
         if not filename:
             filename = datetime.now().strftime("%y/%m/%d %H:%M:%S")
         attach = Attachment(
@@ -489,6 +539,7 @@ class EdiShipmentIn(ModelSQL, ModelView):
     def import_shipment_in(cls, edi_shipments=None):
         pool = Pool()
         Configuration = pool.get('stock.configuration')
+
         configuration = Configuration(1)
         source_path = os.path.abspath(configuration.inbox_path_edi or
              DEFAULT_FILES_LOCATION)
@@ -530,7 +581,6 @@ class EdiShipmentIn(ModelSQL, ModelView):
         Lot = pool.get('stock.lot')
 
         if line.expiration_date:
-            today = datetime.today().date()
             lot = Lot()
             lot.product = line.product
             lot.expiration_date = line.expiration_date
@@ -540,7 +590,9 @@ class EdiShipmentIn(ModelSQL, ModelView):
     @classmethod
     @ModelView.button
     def search_references(cls, edi_shipments):
-        Line = Pool().get('edi.shipment.in.line')
+        pool = Pool()
+        Line = pool.get('edi.shipment.in.line')
+
         to_save = []
         for edi_shipment in edi_shipments:
             if edi_shipment.shipment:
@@ -553,10 +605,13 @@ class EdiShipmentIn(ModelSQL, ModelView):
     @classmethod
     @ModelView.button
     def create_shipment(cls, edi_shipments):
-        ShipmentIn = Pool().get('stock.shipment.in')
-        Move = Pool().get('stock.move')
-        Lot = Pool().get('stock.lot')
-        Purchase = Pool().get('purchase.purchase')
+        pool = Pool()
+        ShipmentIn = pool.get('stock.shipment.in')
+        Move = pool.get('stock.move')
+        Purchase = pool.get('purchase.purchase')
+
+        default_values = ShipmentIn.default_get(ShipmentIn._fields.keys(),
+                with_rec_name=False)
 
         to_save = []
         move_to_save = []
@@ -564,7 +619,7 @@ class EdiShipmentIn(ModelSQL, ModelView):
             if edi_shipment.shipment:
                 continue
 
-            shipment = ShipmentIn()
+            shipment = ShipmentIn(**default_values)
             for reference in edi_shipment.references:
                 if reference.type_ == 'ON' and reference.origin:
                     if isinstance(reference.origin, Purchase):
@@ -576,8 +631,10 @@ class EdiShipmentIn(ModelSQL, ModelView):
                                 'stock_shipment_in_edi.msg_no_purchase_ref'))
 
             shipment.reference = edi_shipment.number
-            shipment.supplier = edi_shipment.party.id
+            shipment.supplier = edi_shipment.party
+            shipment.on_change_supplier()
             edi_shipment.shipment = shipment
+
             for line in edi_shipment.lines:
                 if not line.product:
                     raise UserError(gettext(

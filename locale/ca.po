@@ -72,7 +72,7 @@ msgstr "Tipus de descripció"
 
 msgctxt "field:edi.shipment.in.line,dimension:"
 msgid "Dimension"
-msgstr " Dimensió"
+msgstr "Dimensió"
 
 msgctxt "field:edi.shipment.in.line,dimension_max:"
 msgid "Max"
@@ -88,7 +88,7 @@ msgstr "Límit d'emmagatzematge"
 
 msgctxt "field:edi.shipment.in.line,dimension_unit:"
 msgid "Dimension Unit"
-msgstr " Unitat de dimensió"
+msgstr "Unitat de dimensió"
 
 msgctxt "field:edi.shipment.in.line,edi_shipment:"
 msgid "Shipment"
@@ -96,7 +96,7 @@ msgstr "Albarà"
 
 msgctxt "field:edi.shipment.in.line,expiration_date:"
 msgid "Expiration Date"
-msgstr " Data de caducitat"
+msgstr "Data de caducitat"
 
 msgctxt "field:edi.shipment.in.line,line_number:"
 msgid "Line Number"
@@ -194,10 +194,6 @@ msgctxt "field:edi.shipment.supplier,commercial_register:"
 msgid "Comercial Register"
 msgstr "Registre comercial"
 
-msgctxt "field:edi.shipment.supplier,country_code:"
-msgid "Country_code"
-msgstr ""
-
 msgctxt "field:edi.shipment.supplier,edi_code:"
 msgid "Edi Code"
 msgstr "Codi Edi"
@@ -212,7 +208,7 @@ msgstr "Nom"
 
 msgctxt "field:edi.shipment.supplier,party:"
 msgid "Party"
-msgstr "Tercers"
+msgstr "Tercer"
 
 msgctxt "field:edi.shipment.supplier,street:"
 msgid "Street"
@@ -264,15 +260,23 @@ msgstr "Importar Albarans de Proveïdor EDI"
 
 msgctxt "model:ir.message,text:msg_no_move_ref"
 msgid "There is not move reference in line number %(number)s."
-msgstr " No hi ha referència de moviment a la línia número %(number)s."
+msgstr "No hi ha referència de moviment a la línia número %(number)s."
 
 msgctxt "model:ir.message,text:msg_no_product"
 msgid "There is not product in line number %(number)s."
 msgstr "No hi ha producte a la línia número %(number)s."
 
 msgctxt "model:ir.message,text:msg_no_purchase_ref"
-msgid "There is not purchase origin in reference."
-msgstr " No hi ha origen de compra a les referències de l'albarà edi."
+msgid "There is not purchase origin in edi shipment references."
+msgstr "No hi ha origen de compra a les referències de l'albarà edi."
+
+msgctxt "model:ir.model.button,string:create_shipment_button"
+msgid "Create Shipment"
+msgstr "Crear albarà"
+
+msgctxt "model:ir.model.button,string:search_related_button"
+msgid "Search References"
+msgstr "Cerca referències"
 
 msgctxt "model:ir.ui.menu,name:menu_edi_shipment"
 msgid "Edi Shipment"
@@ -292,7 +296,7 @@ msgstr "Original"
 
 msgctxt "selection:edi.shipment.in,type_:"
 msgid "Expedition Warning"
-msgstr " Avís d'expedició"
+msgstr "Avís d'expedició"
 
 msgctxt "selection:edi.shipment.in.line,code_type:"
 msgid "DUN14"
@@ -332,7 +336,7 @@ msgstr "Descripció lliure"
 
 msgctxt "selection:edi.shipment.in.line,dimension:"
 msgid "Temperature"
-msgstr " Temperatura"
+msgstr "Temperatura"
 
 msgctxt "selection:edi.shipment.in.line,dimension_qualifier:"
 msgid "Storage Limit"
@@ -340,11 +344,11 @@ msgstr "Límit d'emmagatzematge"
 
 msgctxt "selection:edi.shipment.in.line,dimension_unit:"
 msgid "Celsius Degrees"
-msgstr " Graus centígrads"
+msgstr "Graus centígrads"
 
 msgctxt "selection:edi.shipment.in.line,marking_instructions:"
 msgid "Supplier Instructions"
-msgstr " Instruccions del proveïdor"
+msgstr "Instruccions del proveïdor"
 
 msgctxt "selection:edi.shipment.in.line.qty,difference:"
 msgid "Partial Shipment"
@@ -364,7 +368,7 @@ msgstr "45E"
 
 msgctxt "selection:edi.shipment.in.line.qty,type_:"
 msgid "Free Quantity"
-msgstr " Quantitat lliure"
+msgstr "Quantitat lliure"
 
 msgctxt "selection:edi.shipment.in.line.qty,type_:"
 msgid "Quantity Sended"
@@ -416,15 +420,15 @@ msgstr "Provador"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "Final Receiver"
-msgstr " Receptor final"
+msgstr "Receptor final"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "Invoice Issuer"
-msgstr " Emissor de factures"
+msgstr "Emissor de factures"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "Invoice Receiver"
-msgstr " Receptor de factures"
+msgstr "Receptor de factures"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "Legal Purchaser"
@@ -460,11 +464,11 @@ msgstr "Comprador"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "Sender"
-msgstr " Remitent"
+msgstr "Remitent"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "Stock Receiver"
-msgstr " Receptor d’estoc"
+msgstr "Receptor d’estoc"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "Supplier"
@@ -488,7 +492,7 @@ msgstr "Tercers"
 
 msgctxt "view:edi.shipment.in:"
 msgid "Search References"
-msgstr " Cerca referències"
+msgstr "Cerca referències"
 
 msgctxt "view:stock.configuration:"
 msgid "EDI"

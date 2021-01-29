@@ -60,6 +60,7 @@
 
       <record model="ir.model.button" id="create_shipment_button">
           <field name="name">create_shipment</field>
+          <field name="string">Create Shipment</field>
           <field name="model" search="[('model', '=', 'edi.shipment.in')]"/>
       </record>
 
@@ -71,6 +72,7 @@
 
         <record model="ir.model.button" id="search_related_button">
           <field name="name">search_references</field>
+          <field name="string">Search References</field>
           <field name="model" search="[('model', '=', 'edi.shipment.in')]"/>
       </record>
       <record model="ir.model.button-res.group"
@@ -84,6 +86,24 @@
           <field name="interval_number" eval="1"/>
           <field name="interval_type">hours</field>
           <field name="method">edi.shipment.in|import_shipment_in</field>
+      </record>
+
+      <record model="ir.ui.view" id="stock_configuration_view_form">
+          <field name="model">stock.configuration</field>
+          <field name="inherit" ref="stock.stock_configuration_view_form"/>
+          <field name="name">stock_configuration_form</field>
+      </record>
+      <!-- EDI Shipments User -->
+      <record model="res.user" id="user_edi_shipment_in">
+          <field name="login">user_edi_shipments</field>
+          <field name="name">Cron EDI Shipments</field>
+          <field name="signature"></field>
+          <field name="active" eval="False"/>
+      </record>
+      <record model="res.user-res.group"
+          id="user_edi_shipment_in_group_admin">
+          <field name="user" ref="user_edi_shipment_in"/>
+          <field name="group" ref="res.group_admin"/>
       </record>
 
     </data>

@@ -84,7 +84,7 @@ msgstr "Min"
 
 msgctxt "field:edi.shipment.in.line,dimension_qualifier:"
 msgid "Storage Limit"
-msgstr " Límite de almacenamiento"
+msgstr "Límite de almacenamiento"
 
 msgctxt "field:edi.shipment.in.line,dimension_unit:"
 msgid "Dimension Unit"
@@ -108,7 +108,7 @@ msgstr "Número de lote"
 
 msgctxt "field:edi.shipment.in.line,marking_instructions:"
 msgid "Marking Instructions"
-msgstr " Instrucciones de marcado"
+msgstr "Instrucciones de marcado"
 
 msgctxt "field:edi.shipment.in.line,packing_date:"
 msgid "Packing Date"
@@ -140,7 +140,7 @@ msgstr "Código de proveedor"
 
 msgctxt "field:edi.shipment.in.line.qty,difference:"
 msgid "Difference"
-msgstr ""
+msgstr "Diferencia"
 
 msgctxt "field:edi.shipment.in.line.qty,edi_shipment_line:"
 msgid "Shipment Line"
@@ -194,10 +194,6 @@ msgctxt "field:edi.shipment.supplier,commercial_register:"
 msgid "Comercial Register"
 msgstr "Registro comercial"
 
-msgctxt "field:edi.shipment.supplier,country_code:"
-msgid "Country_code"
-msgstr "Código de país"
-
 msgctxt "field:edi.shipment.supplier,edi_code:"
 msgid "Edi Code"
 msgstr "Código Edi"
@@ -212,7 +208,7 @@ msgstr "Nombre"
 
 msgctxt "field:edi.shipment.supplier,party:"
 msgid "Party"
-msgstr "Terceros"
+msgstr "Tercero"
 
 msgctxt "field:edi.shipment.supplier,street:"
 msgid "Street"
@@ -244,7 +240,7 @@ msgstr "Línea de albarán Edi de proveedor"
 
 msgctxt "model:edi.shipment.in.line.qty,name:"
 msgid "Edi Shipment in Line Qty"
-msgstr ""
+msgstr "Cantidad línea de albarán Edi de proveedor"
 
 msgctxt "model:edi.shipment.in.reference,name:"
 msgid "Shipment In Reference"
@@ -268,11 +264,19 @@ msgstr "No hay referencia de movimiento en la línia número %(number)s."
 
 msgctxt "model:ir.message,text:msg_no_product"
 msgid "There is not product in line number %(number)s."
-msgstr " No hay producto en la línea número %(number)s."
+msgstr "No hay producto en la línea número %(number)s."
 
 msgctxt "model:ir.message,text:msg_no_purchase_ref"
-msgid "There is not purchase origin in reference."
-msgstr " No hay origen de compra en las referencias del albarán edi."
+msgid "There is not purchase origin in edi shipment references."
+msgstr "No hay origen de compra en las referencias del albarán edi."
+
+msgctxt "model:ir.model.button,string:create_shipment_button"
+msgid "Create Shipment"
+msgstr "Crear albarán"
+
+msgctxt "model:ir.model.button,string:search_related_button"
+msgid "Search References"
+msgstr "Buscar referencias"
 
 msgctxt "model:ir.ui.menu,name:menu_edi_shipment"
 msgid "Edi Shipment"
@@ -316,7 +320,7 @@ msgstr "EN"
 
 msgctxt "selection:edi.shipment.in.line,desccod:"
 msgid "Consumption Unit"
-msgstr " Unidad de consumo"
+msgstr "Unidad de consumo"
 
 msgctxt "selection:edi.shipment.in.line,desccod:"
 msgid "Dispatch Unit"
@@ -336,7 +340,7 @@ msgstr "Temperatura"
 
 msgctxt "selection:edi.shipment.in.line,dimension_qualifier:"
 msgid "Storage Limit"
-msgstr " Límite de almacenamiento"
+msgstr "Límite de almacenamiento"
 
 msgctxt "selection:edi.shipment.in.line,dimension_unit:"
 msgid "Celsius Degrees"
@@ -344,7 +348,7 @@ msgstr "Grados centígrados"
 
 msgctxt "selection:edi.shipment.in.line,marking_instructions:"
 msgid "Supplier Instructions"
-msgstr " Instrucciones del proveedor"
+msgstr "Instrucciones del proveedor"
 
 msgctxt "selection:edi.shipment.in.line.qty,difference:"
 msgid "Partial Shipment"
@@ -416,15 +420,15 @@ msgstr "Probador"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "Final Receiver"
-msgstr " Receptor final"
+msgstr "Receptor final"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "Invoice Issuer"
-msgstr " Emisor de facturas"
+msgstr "Emisor de facturas"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "Invoice Receiver"
-msgstr " Receptor de facturas"
+msgstr "Receptor de facturas"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "Legal Purchaser"
@@ -432,7 +436,7 @@ msgstr "Comprador legal"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "Legal Supplier"
-msgstr " Proveedor legal"
+msgstr "Proveedor legal"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "NAD"
@@ -452,7 +456,7 @@ msgstr ""
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "Payment Issuer"
-msgstr " Emisor de pago"
+msgstr "Emisor de pago"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "Purchaser"
@@ -460,11 +464,11 @@ msgstr "Comprador"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "Sender"
-msgstr ""
+msgstr "Remitente"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "Stock Receiver"
-msgstr " Receptor de stock"
+msgstr "Receptor de stock"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "Supplier"
@@ -488,7 +492,7 @@ msgstr "Terceros"
 
 msgctxt "view:edi.shipment.in:"
 msgid "Search References"
-msgstr " Buscar referencias"
+msgstr "Buscar referencias"
 
 msgctxt "view:stock.configuration:"
 msgid "EDI"
