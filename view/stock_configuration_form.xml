@@ -8,11 +8,5 @@
         <label name="inbox_path_edi"/>
         <field name="inbox_path_edi" colspan="3"/>
         <newline/>
-        <label name="errors_path_edi"/>
-        <field name="errors_path_edi" colspan="3"/>
-        <newline/>
-        <label name="template_order_response_edi"/>
-        <field name="template_order_response_edi" colspan="3"/>
-        <newline/>
     </xpath>
 </data>

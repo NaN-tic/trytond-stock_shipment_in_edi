@@ -1,0 +1,11 @@
+<tree>
+    <field name="company"/>
+    <field name="number"/>
+    <field name="type_"/>
+    <field name="function_"/>
+    <!-- <field name="party"/> -->
+    <field name="shipment"/>
+    <field name="expedition_date"/>
+    <field name="estimated_date"/>
+    <field name="manual_party"/> 
+</tree>

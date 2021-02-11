@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+<!-- The COPYRIGHT file at the top level of this repository contains the full
+     copyright notices and license terms. -->
+<tryton>
+    <data>
+      <record model="ir.ui.view" id="edi_shipment_in_view_form">
+          <field name="model">edi.shipment.in</field>
+          <field name="type">form</field>
+          <field name="name">edi_shipment_form</field>
+      </record>
+
+      <record model="ir.ui.view" id="edi_shipment_in_view_tree">
+          <field name="model">edi.shipment.in</field>
+          <field name="type">tree</field>
+          <field name="name">edi_shipment_tree</field>
+      </record>
+
+      <record model="ir.ui.view" id="edi_shipment_line_view_form">
+          <field name="model">edi.shipment.in.line</field>
+          <field name="type">form</field>
+          <field name="name">edi_shipment_line_form</field>
+      </record>
+
+      <record model="ir.ui.view" id="edi_shipment_line_view_tree">
+          <field name="model">edi.shipment.in.line</field>
+          <field name="type">tree</field>
+          <field name="name">edi_shipment_line_tree</field>
+      </record>
+
+      <record model="ir.ui.view" id="supplier_edi_view_form">
+          <field name="model">edi.shipment.supplier</field>
+          <field name="type">form</field>
+          <field name="name">supplier_edi_form</field>
+      </record>
+      <record model="ir.ui.view" id="supplier_edi_view_tree">
+          <field name="model">edi.shipment.supplier</field>
+          <field name="type">tree</field>
+          <field name="name">supplier_edi_tree</field>
+      </record>
+
+      <record model="ir.ui.view" id="invoice_edi_reference_view_form">
+          <field name="model">edi.shipment.in.reference</field>
+          <field name="type">form</field>
+          <field name="name">edi_shipment_in_reference_form</field>
+      </record>
+      <record model="ir.ui.view" id="invoice_edi_reference_view_tree">
+          <field name="model">edi.shipment.in.reference</field>
+          <field name="type">tree</field>
+          <field name="name">edi_shipment_in_reference_tree</field>
+      </record>
+
+      <record model="ir.action.act_window" id="act_edi_shipment_in_form">
+          <field name="name">Edi Shipment</field>
+          <field name="res_model">edi.shipment.in</field>
+      </record>
+
+      <record model="ir.action.act_window.view" id="act_edi_shipment_in_form_view1">
+          <field name="sequence" eval="10"/>
+          <field name="view" ref="edi_shipment_in_view_tree"/>
+          <field name="act_window" ref="act_edi_shipment_in_form"/>
+      </record>
+
+      <record model="ir.action.act_window.view" id="act_edi_shipment_in_form_view2">
+          <field name="sequence" eval="20"/>
+          <field name="view" ref="edi_shipment_in_view_form"/>
+          <field name="act_window" ref="act_edi_shipment_in_form"/>
+      </record>
+
+      <menuitem name="Edi Shipment" parent="stock.menu_stock"
+          id="menu_edi_shipment" sequence="40"/>
+
+      <menuitem parent="menu_edi_shipment"
+          action="act_edi_shipment_in_form"
+          id="menuitem_edi_shipment"
+          sequence="0" icon="tryton-list"/>
+
+
+      <record model="ir.ui.menu-res.group" id="menu_edi_shipment_in_group_account">
+          <field name="menu" ref="menu_edi_shipment"/>
+          <field name="group" ref="stock.group_stock_admin"/>
+      </record>
+
+      <record model="ir.model.button" id="create_shipment_button">
+          <field name="name">create_shipment</field>
+          <field name="string">Create Shipment</field>
+          <field name="model" search="[('model', '=', 'edi.shipment.in')]"/>
+      </record>
+
+      <record model="ir.model.button-res.group"
+          id="create_invoice_button_group_account">
+          <field name="button" ref="create_shipment_button"/>
+          <field name="group" ref="stock.group_stock_admin"/>
+      </record>
+
+        <record model="ir.model.button" id="search_related_button">
+          <field name="name">search_references</field>
+          <field name="string">Search References</field>
+          <field name="model" search="[('model', '=', 'edi.shipment.in')]"/>
+      </record>
+      <record model="ir.model.button-res.group"
+          id="search_related_button_group_account">
+          <field name="button" ref="search_related_button"/>
+          <field name="group" ref="stock.group_stock_admin"/>
+      </record>
+
+      <record model="ir.cron" id="cron_edi_shipment_in">
+          <field name="active" eval="True"/>
+          <field name="interval_number" eval="1"/>
+          <field name="interval_type">hours</field>
+          <field name="method">edi.shipment.in|import_shipment_in</field>
+      </record>
+
+      <record model="ir.ui.view" id="stock_configuration_view_form">
+          <field name="model">stock.configuration</field>
+          <field name="inherit" ref="stock.stock_configuration_view_form"/>
+          <field name="name">stock_configuration_form</field>
+      </record>
+      <!-- EDI Shipments User -->
+      <record model="res.user" id="user_edi_shipment_in">
+          <field name="login">user_edi_shipments</field>
+          <field name="name">Cron EDI Shipments</field>
+          <field name="signature"></field>
+          <field name="active" eval="False"/>
+      </record>
+      <record model="res.user-res.group"
+          id="user_edi_shipment_in_group_admin">
+          <field name="user" ref="user_edi_shipment_in"/>
+          <field name="group" ref="res.group_admin"/>
+      </record>
+
+    </data>
+</tryton>
