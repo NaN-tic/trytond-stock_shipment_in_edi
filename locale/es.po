@@ -2,33 +2,497 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:stock.configuration,errors_path_edi:"
-msgid "Errors Path"
-msgstr "Path de errores"
+msgctxt "field:edi.shipment.in,company:"
+msgid "Company"
+msgstr "Empresa"
+
+msgctxt "field:edi.shipment.in,estimated_date:"
+msgid "Estimated Date"
+msgstr "Fecha estimada"
+
+msgctxt "field:edi.shipment.in,expedition_date:"
+msgid "Expedition Date"
+msgstr "Fecha de expedición"
+
+msgctxt "field:edi.shipment.in,function_:"
+msgid "Function Type"
+msgstr "Tipo de función"
+
+msgctxt "field:edi.shipment.in,lines:"
+msgid "Shipment"
+msgstr "Albarán"
+
+msgctxt "field:edi.shipment.in,manual_party:"
+msgid "Manual Party"
+msgstr "Tercero manual"
+
+msgctxt "field:edi.shipment.in,number:"
+msgid "Number"
+msgstr "Número"
+
+msgctxt "field:edi.shipment.in,party:"
+msgid "Shipment Party"
+msgstr "Tercero del envío"
+
+msgctxt "field:edi.shipment.in,references:"
+msgid "References"
+msgstr "Referencias"
+
+msgctxt "field:edi.shipment.in,shipment:"
+msgid "Shipment"
+msgstr "Albarán"
+
+msgctxt "field:edi.shipment.in,suppliers:"
+msgid "Supplier"
+msgstr "Proveedor"
+
+msgctxt "field:edi.shipment.in,type_:"
+msgid "Document Type"
+msgstr "Tipo de documento"
+
+msgctxt "field:edi.shipment.in.line,code:"
+msgid "Code"
+msgstr "Código"
+
+msgctxt "field:edi.shipment.in.line,code_type:"
+msgid "Code Type"
+msgstr "Tipo de código"
+
+msgctxt "field:edi.shipment.in.line,desccod:"
+msgid "Codification description"
+msgstr "Descripción codificada"
+
+msgctxt "field:edi.shipment.in.line,description:"
+msgid "Description"
+msgstr "Descripción"
+
+msgctxt "field:edi.shipment.in.line,description_type:"
+msgid "Type of Description"
+msgstr "Tipo de descripción"
+
+msgctxt "field:edi.shipment.in.line,dimension:"
+msgid "Dimension"
+msgstr "Dimensión"
+
+msgctxt "field:edi.shipment.in.line,dimension_max:"
+msgid "Max"
+msgstr "Max"
+
+msgctxt "field:edi.shipment.in.line,dimension_min:"
+msgid "Min"
+msgstr "Min"
+
+msgctxt "field:edi.shipment.in.line,dimension_qualifier:"
+msgid "Storage Limit"
+msgstr "Límite de almacenamiento"
+
+msgctxt "field:edi.shipment.in.line,dimension_unit:"
+msgid "Dimension Unit"
+msgstr "Unidad de dimensión"
+
+msgctxt "field:edi.shipment.in.line,edi_shipment:"
+msgid "Shipment"
+msgstr "Albarán"
+
+msgctxt "field:edi.shipment.in.line,expiration_date:"
+msgid "Expiration Date"
+msgstr "Fecha de caducidad"
+
+msgctxt "field:edi.shipment.in.line,line_number:"
+msgid "Line Number"
+msgstr "Número de línea"
+
+msgctxt "field:edi.shipment.in.line,lot_number:"
+msgid "Lot Number"
+msgstr "Número de lote"
+
+msgctxt "field:edi.shipment.in.line,marking_instructions:"
+msgid "Marking Instructions"
+msgstr "Instrucciones de marcado"
+
+msgctxt "field:edi.shipment.in.line,packing_date:"
+msgid "Packing Date"
+msgstr "Fecha de embalaje"
+
+msgctxt "field:edi.shipment.in.line,product:"
+msgid "Product"
+msgstr "Producto"
+
+msgctxt "field:edi.shipment.in.line,purchaser_code:"
+msgid "Purchaser Code"
+msgstr "Código del comprador"
+
+msgctxt "field:edi.shipment.in.line,quantities:"
+msgid "Quantities"
+msgstr "Cantidades"
+
+msgctxt "field:edi.shipment.in.line,references:"
+msgid "References"
+msgstr "Referencias"
+
+msgctxt "field:edi.shipment.in.line,serial_number:"
+msgid "Serial Number"
+msgstr "Número de serie"
+
+msgctxt "field:edi.shipment.in.line,supplier_code:"
+msgid "Supplier Code"
+msgstr "Código de proveedor"
+
+msgctxt "field:edi.shipment.in.line.qty,difference:"
+msgid "Difference"
+msgstr "Diferencia"
+
+msgctxt "field:edi.shipment.in.line.qty,edi_shipment_line:"
+msgid "Shipment Line"
+msgstr "Línea de albarán"
+
+msgctxt "field:edi.shipment.in.line.qty,quantity:"
+msgid "Quantity"
+msgstr "Cantidad"
+
+msgctxt "field:edi.shipment.in.line.qty,type_:"
+msgid "Quantity Type"
+msgstr "Tipo de cantidad"
+
+msgctxt "field:edi.shipment.in.line.qty,unit:"
+msgid "Unit"
+msgstr "Unidad"
+
+msgctxt "field:edi.shipment.in.reference,edi_shipment:"
+msgid "Shipment"
+msgstr "Albarán"
+
+msgctxt "field:edi.shipment.in.reference,edi_shipment_in_line:"
+msgid "Line"
+msgstr "Línea"
+
+msgctxt "field:edi.shipment.in.reference,origin:"
+msgid "Reference"
+msgstr "Orígen"
+
+msgctxt "field:edi.shipment.in.reference,reference:"
+msgid "Reference"
+msgstr "Referencia"
+
+msgctxt "field:edi.shipment.in.reference,reference_date:"
+msgid "Reference Date"
+msgstr "Fecha de referencia"
+
+msgctxt "field:edi.shipment.in.reference,type_:"
+msgid "Reference Code"
+msgstr "Código de referencia"
+
+msgctxt "field:edi.shipment.supplier,account_bank:"
+msgid "Account Bank"
+msgstr "Cuenta bancaria"
+
+msgctxt "field:edi.shipment.supplier,city:"
+msgid "City"
+msgstr "Ciudad"
+
+msgctxt "field:edi.shipment.supplier,commercial_register:"
+msgid "Comercial Register"
+msgstr "Registro comercial"
+
+msgctxt "field:edi.shipment.supplier,edi_code:"
+msgid "Edi Code"
+msgstr "Código Edi"
+
+msgctxt "field:edi.shipment.supplier,edi_shipment:"
+msgid "Edi Shipment"
+msgstr "Albarán Edi"
+
+msgctxt "field:edi.shipment.supplier,name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:edi.shipment.supplier,party:"
+msgid "Party"
+msgstr "Tercero"
+
+msgctxt "field:edi.shipment.supplier,street:"
+msgid "Street"
+msgstr "Calle"
+
+msgctxt "field:edi.shipment.supplier,type_:"
+msgid "Type"
+msgstr "Tipo"
+
+msgctxt "field:edi.shipment.supplier,vat:"
+msgid "Vat"
+msgstr "NIF"
+
+msgctxt "field:edi.shipment.supplier,zip:"
+msgid "zip"
+msgstr "zip"
 
 msgctxt "field:stock.configuration,inbox_path_edi:"
 msgid "Inbox Path EDI"
 msgstr "Path de entrada EDI"
 
-msgctxt "field:stock.configuration,template_order_response_edi:"
-msgid "Template EDI Used for Response"
-msgstr "Plantilla EDI usada para la Respuesta"
+msgctxt "model:edi.shipment.in,name:"
+msgid "Edi shipment In"
+msgstr "Albarán Edi de proveedor"
 
-msgctxt "field:stock.move,edi_description:"
-msgid "EDI Description"
-msgstr "Descripción EDI"
+msgctxt "model:edi.shipment.in.line,name:"
+msgid "Edi Shipment in Line"
+msgstr "Línea de albarán Edi de proveedor"
 
-msgctxt "field:stock.move,edi_quantity:"
-msgid "EDI Quantity"
-msgstr "Cantidad EDI"
+msgctxt "model:edi.shipment.in.line.qty,name:"
+msgid "Edi Shipment in Line Qty"
+msgstr "Cantidad línea de albarán Edi de proveedor"
 
-msgctxt "model:ir.cron,name:cron_import_edi_shipment_in"
+msgctxt "model:edi.shipment.in.reference,name:"
+msgid "Shipment In Reference"
+msgstr "Referencia albarán de proveedor"
+
+msgctxt "model:edi.shipment.supplier,name:"
+msgid "Supplier Edi"
+msgstr "Proveedor Edi"
+
+msgctxt "model:ir.action,name:act_edi_shipment_in_form"
+msgid "Edi Shipment"
+msgstr "Albarán Edi"
+
+msgctxt "model:ir.cron,name:"
 msgid "Import EDI Supplier Shipments"
 msgstr "Importar Albaranes de Proveedor EDI"
 
-msgctxt "model:res.user,name:user_edi_shipment_in"
-msgid "Cron EDI Shipments"
-msgstr "Cron Albaranes EDI"
+msgctxt "model:ir.message,text:msg_no_move_ref"
+msgid "There is not move reference in line number %(number)s."
+msgstr "No hay referencia de movimiento en la línia número %(number)s."
+
+msgctxt "model:ir.message,text:msg_no_product"
+msgid "There is not product in line number %(number)s."
+msgstr "No hay producto en la línea número %(number)s."
+
+msgctxt "model:ir.message,text:msg_no_purchase_ref"
+msgid "There is not purchase origin in edi shipment references."
+msgstr "No hay origen de compra en las referencias del albarán edi."
+
+msgctxt "model:ir.model.button,string:create_shipment_button"
+msgid "Create Shipment"
+msgstr "Crear albarán"
+
+msgctxt "model:ir.model.button,string:search_related_button"
+msgid "Search References"
+msgstr "Buscar referencias"
+
+msgctxt "model:ir.ui.menu,name:menu_edi_shipment"
+msgid "Edi Shipment"
+msgstr "Albarán Edi"
+
+msgctxt "model:ir.ui.menu,name:menuitem_edi_shipment"
+msgid "Edi Shipment"
+msgstr "Albarán Edi"
+
+msgctxt "selection:edi.shipment.in,function_:"
+msgid "Copy"
+msgstr "Copiar"
+
+msgctxt "selection:edi.shipment.in,function_:"
+msgid "Original"
+msgstr "Original"
+
+msgctxt "selection:edi.shipment.in,type_:"
+msgid "Expedition Warning"
+msgstr "Aviso de expedición"
+
+msgctxt "selection:edi.shipment.in.line,code_type:"
+msgid "DUN14"
+msgstr "DUN14"
+
+msgctxt "selection:edi.shipment.in.line,code_type:"
+msgid "EAN13"
+msgstr "EAN13"
+
+msgctxt "selection:edi.shipment.in.line,code_type:"
+msgid "EAN14"
+msgstr "EAN14"
+
+msgctxt "selection:edi.shipment.in.line,code_type:"
+msgid "EAN8"
+msgstr "EAN8"
+
+msgctxt "selection:edi.shipment.in.line,code_type:"
+msgid "EN"
+msgstr "EN"
+
+msgctxt "selection:edi.shipment.in.line,desccod:"
+msgid "Consumption Unit"
+msgstr "Unidad de consumo"
+
+msgctxt "selection:edi.shipment.in.line,desccod:"
+msgid "Dispatch Unit"
+msgstr "Unidad de envío"
+
+msgctxt "selection:edi.shipment.in.line,description_type:"
+msgid "Codificated Description"
+msgstr "Descripción codificada"
+
+msgctxt "selection:edi.shipment.in.line,description_type:"
+msgid "Free Description"
+msgstr "Descripción libre"
+
+msgctxt "selection:edi.shipment.in.line,dimension:"
+msgid "Temperature"
+msgstr "Temperatura"
+
+msgctxt "selection:edi.shipment.in.line,dimension_qualifier:"
+msgid "Storage Limit"
+msgstr "Límite de almacenamiento"
+
+msgctxt "selection:edi.shipment.in.line,dimension_unit:"
+msgid "Celsius Degrees"
+msgstr "Grados centígrados"
+
+msgctxt "selection:edi.shipment.in.line,marking_instructions:"
+msgid "Supplier Instructions"
+msgstr "Instrucciones del proveedor"
+
+msgctxt "selection:edi.shipment.in.line.qty,difference:"
+msgid "Partial Shipment"
+msgstr "Albarán parcial"
+
+msgctxt "selection:edi.shipment.in.line.qty,difference:"
+msgid "Partial Shipment but Complete"
+msgstr "Albarán parcial pero completo"
+
+msgctxt "selection:edi.shipment.in.line.qty,type_:"
+msgid "21"
+msgstr "21"
+
+msgctxt "selection:edi.shipment.in.line.qty,type_:"
+msgid "45E"
+msgstr "45E"
+
+msgctxt "selection:edi.shipment.in.line.qty,type_:"
+msgid "Free Quantity"
+msgstr "Cantidad libre"
+
+msgctxt "selection:edi.shipment.in.line.qty,type_:"
+msgid "Quantity Sended"
+msgstr "Cantidad enviada"
+
+msgctxt "selection:edi.shipment.in.line.qty,type_:"
+msgid "Quantity on package"
+msgstr "Cantidad en el paquete"
+
+msgctxt "selection:edi.shipment.in.line.qty,unit:"
+msgid "EA"
+msgstr "EA"
+
+msgctxt "selection:edi.shipment.in.line.qty,unit:"
+msgid "Gramo"
+msgstr "Gramo"
+
+msgctxt "selection:edi.shipment.in.line.qty,unit:"
+msgid "Kilogramo"
+msgstr "Kilogramo"
+
+msgctxt "selection:edi.shipment.in.line.qty,unit:"
+msgid "Litro"
+msgstr "Litro"
+
+msgctxt "selection:edi.shipment.in.line.qty,unit:"
+msgid "Pieza"
+msgstr "Pieza"
+
+msgctxt "selection:edi.shipment.in.reference,type_:"
+msgid "Line Number"
+msgstr "Número de línea"
+
+msgctxt "selection:edi.shipment.in.reference,type_:"
+msgid "Purchase"
+msgstr "Compra"
+
+msgctxt "selection:edi.shipment.in.reference,type_:"
+msgid "Shipment"
+msgstr "Albarán"
+
+msgctxt "selection:edi.shipment.in.reference,type_:"
+msgid "VN"
+msgstr "VN"
+
+msgctxt "selection:edi.shipment.supplier,type_:"
+msgid "Endorser"
+msgstr "Probador"
+
+msgctxt "selection:edi.shipment.supplier,type_:"
+msgid "Final Receiver"
+msgstr "Receptor final"
+
+msgctxt "selection:edi.shipment.supplier,type_:"
+msgid "Invoice Issuer"
+msgstr "Emisor de facturas"
+
+msgctxt "selection:edi.shipment.supplier,type_:"
+msgid "Invoice Receiver"
+msgstr "Receptor de facturas"
+
+msgctxt "selection:edi.shipment.supplier,type_:"
+msgid "Legal Purchaser"
+msgstr "Comprador legal"
+
+msgctxt "selection:edi.shipment.supplier,type_:"
+msgid "Legal Supplier"
+msgstr "Proveedor legal"
+
+msgctxt "selection:edi.shipment.supplier,type_:"
+msgid "NAD"
+msgstr ""
+
+msgctxt "selection:edi.shipment.supplier,type_:"
+msgid "NADMR"
+msgstr ""
+
+msgctxt "selection:edi.shipment.supplier,type_:"
+msgid "NADPE"
+msgstr ""
+
+msgctxt "selection:edi.shipment.supplier,type_:"
+msgid "NADPW"
+msgstr ""
+
+msgctxt "selection:edi.shipment.supplier,type_:"
+msgid "Payment Issuer"
+msgstr "Emisor de pago"
+
+msgctxt "selection:edi.shipment.supplier,type_:"
+msgid "Purchaser"
+msgstr "Comprador"
+
+msgctxt "selection:edi.shipment.supplier,type_:"
+msgid "Sender"
+msgstr "Remitente"
+
+msgctxt "selection:edi.shipment.supplier,type_:"
+msgid "Stock Receiver"
+msgstr "Receptor de stock"
+
+msgctxt "selection:edi.shipment.supplier,type_:"
+msgid "Supplier"
+msgstr "Proveedor"
+
+msgctxt "selection:ir.cron,method:"
+msgid "Import EDI Shipment In Orders"
+msgstr "Importar pedidos albarán de proveedor EDI"
+
+msgctxt "view:edi.shipment.in:"
+msgid "Create Shipment"
+msgstr "Crear albarán"
+
+msgctxt "view:edi.shipment.in:"
+msgid "Lines"
+msgstr "Líneas"
+
+msgctxt "view:edi.shipment.in:"
+msgid "Parties"
+msgstr "Terceros"
+
+msgctxt "view:edi.shipment.in:"
+msgid "Search References"
+msgstr "Buscar referencias"
 
 msgctxt "view:stock.configuration:"
 msgid "EDI"

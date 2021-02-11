@@ -1,0 +1,5 @@
+<tree>
+    <field name="type_"/>
+    <field name="reference"/>
+    <field name="origin"/>
+</tree>

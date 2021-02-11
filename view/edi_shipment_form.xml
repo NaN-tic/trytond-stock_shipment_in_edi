@@ -1,0 +1,33 @@
+<form col="8">
+    <label name="company"/>
+    <field name="company"/>
+    <label name="shipment"/>
+    <field name="shipment"/>
+    <label name="party"/>
+    <field name="party"/>
+    <label name="manual_party"/>
+    <field name="manual_party"/>
+    <newline/>
+    <label name="number"/>
+    <field name="number"/>
+    <label name="type_"/>
+    <field name="type_"/>
+    <label name="function_"/>
+    <field name="function_"/>
+    <newline/>
+    <label name="expedition_date"/>
+    <field name="expedition_date"/>
+    <label name="estimated_date"/>
+    <field name="estimated_date"/>
+    <notebook colspan="8">
+      <page id="references" string="Parties">
+        <field name="references" colspan="2"/>
+        <field name="suppliers" colspan="2"/>
+      </page>
+      <page id="lines" string="Lines">
+        <field name="lines" colspan="6"/>
+      </page>
+    </notebook>
+    <button name="create_shipment"/>
+    <button name="search_references"/>
+</form>

@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<!-- The COPYRIGHT file at the top level of this repository contains the full
-     copyright notices and license terms. -->
-<data>
-    <xpath expr="/tree/field[@name='pending_quantity']" position="after">
-        <field name="edi_quantity"/>
-        <field name="edi_description"/>
-    </xpath>
-</data>

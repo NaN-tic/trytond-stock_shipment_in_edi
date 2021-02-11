@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!-- The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form col="4">
+  <label name="edi_code"/>
+  <field name="edi_code"/>
+  <label name="vat"/>
+  <field name="vat"/>
+  <label name="name"/>
+  <field name="name"/>
+  <label name="commercial_register"/>
+  <field name="commercial_register"/>
+  <label name="street"/>
+  <field name="street"/>
+  <label name="city"/>
+  <field name="city"/>
+  <label name="zip"/>
+  <field name="zip"/>
+  <label name="vat"/>
+  <field name="vat"/>
+  <label name="country_code"/>
+  <field name="country_code"/>
+  <label name="account_bank"/>
+  <field name="account_bank"/>
+</form>
