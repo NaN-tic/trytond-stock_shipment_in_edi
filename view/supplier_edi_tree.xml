@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!-- The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tree>
+  <field name="party"/>
+  <field name="edi_code"/>
+  <field name="vat"/>
+  <field name="name"/>
+  <field name="commercial_register"/>
+  <field name="city"/>
+  <field name="zip"/>
+  <field name="vat"/>
+  <field name="country_code"/>
+  <field name="account_bank"/>
+</tree>

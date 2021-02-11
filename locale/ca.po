@@ -168,7 +168,7 @@ msgstr "Línia"
 
 msgctxt "field:edi.shipment.in.reference,origin:"
 msgid "Reference"
-msgstr "Referència"
+msgstr "Orígen"
 
 msgctxt "field:edi.shipment.in.reference,reference:"
 msgid "Reference"

@@ -27,6 +27,28 @@
           <field name="name">edi_shipment_line_tree</field>
       </record>
 
+      <record model="ir.ui.view" id="supplier_edi_view_form">
+          <field name="model">edi.shipment.supplier</field>
+          <field name="type">form</field>
+          <field name="name">supplier_edi_form</field>
+      </record>
+      <record model="ir.ui.view" id="supplier_edi_view_tree">
+          <field name="model">edi.shipment.supplier</field>
+          <field name="type">tree</field>
+          <field name="name">supplier_edi_tree</field>
+      </record>
+
+      <record model="ir.ui.view" id="invoice_edi_reference_view_form">
+          <field name="model">edi.shipment.in.reference</field>
+          <field name="type">form</field>
+          <field name="name">edi_shipment_in_reference_form</field>
+      </record>
+      <record model="ir.ui.view" id="invoice_edi_reference_view_tree">
+          <field name="model">edi.shipment.in.reference</field>
+          <field name="type">tree</field>
+          <field name="name">edi_shipment_in_reference_tree</field>
+      </record>
+
       <record model="ir.action.act_window" id="act_edi_shipment_in_form">
           <field name="name">Edi Shipment</field>
           <field name="res_model">edi.shipment.in</field>
