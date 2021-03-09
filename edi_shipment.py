@@ -85,9 +85,10 @@ class EdiShipmentReference(ModelSQL, ModelView):
                 ('stock.move', 'Move')]
 
     def read_message(self, message):
-        message.pop(0)
-        type_ = message.pop(0)
-        value = message.pop(0)
+        if message:
+            message.pop(0)
+        type_ = message.pop(0) if message else ''
+        value = message.pop(0) if message else ''
         self.type_ = type_
         self.value = value
 
@@ -209,12 +210,12 @@ class EdiShipmentInLine(ModelSQL, ModelView):
     product = fields.Many2One('product.product', 'Product')
 
     def read_LIN(self, message):
-        self.code = message.pop(0)
-        self.code_type = message.pop(0)
-        self.line_number = message.pop(0)
+        self.code = message.pop(0) if message else ''
+        self.code_type = message.pop(0) if message else ''
+        self.line_number = message.pop(0) if message else ''
 
     def read_PIALIN(self, message):
-        self.purchaser_code = message.pop(0)
+        self.purchaser_code = message.pop(0) if message else ''
         if message:
             self.supplier_code = message.pop(0)
         if message:
@@ -223,13 +224,13 @@ class EdiShipmentInLine(ModelSQL, ModelView):
             self.lot_number = message.pop(0)
 
     def read_IMDLIN(self, message):
-        self.description_type = message.pop(0)
-        self.description = message.pop(0)
+        self.description_type = message.pop(0) if message else ''
+        self.description = message.pop(0) if message else ''
         if message:
             self.desccod = message.pop(0)
 
     def read_MEALIN(self, message):
-        self.dimension = message.pop(0)
+        self.dimension = message.pop(0) if message else ''
         if message:
             self.dimension_unit = message.pop(0)
         if message:
@@ -244,8 +245,8 @@ class EdiShipmentInLine(ModelSQL, ModelView):
         QTY = pool.get('edi.shipment.in.line.qty')
 
         qty = QTY()
-        qty.type_ = message.pop(0)
-        qty.quantity = to_decimal(message.pop(0), 4)
+        qty.type_ = message.pop(0) if message else ''
+        qty.quantity = to_decimal(message.pop(0), 4) if message else Decimal(0)
         if message:
             qty.unit = message.pop(0)
 
@@ -258,15 +259,15 @@ class EdiShipmentInLine(ModelSQL, ModelView):
         REF = pool.get('edi.shipment.in.reference')
 
         ref = REF()
-        ref.type_ = message.pop(0)
-        ref.reference = message.pop(0)
+        ref.type_ = message.pop(0) if message else ''
+        ref.reference = message.pop(0) if message else ''
         ref.search_reference()
         if not getattr(self, 'references', False):
             self.references = []
         self.references += (ref,)
 
     def read_PCILIN(self, message):
-        self.marking_instructions = message.pop(0)
+        self.marking_instructions = message.pop(0) if message else ''
         if message:
             self.expiration_date = to_date(message.pop(0))
         if message:
@@ -279,9 +280,9 @@ class EdiShipmentInLine(ModelSQL, ModelView):
         QTY = pool.get('edi.shipment.in.line.qty')
 
         qty = QTY()
-        qty.type_ = message.pop(0)
-        qty.quantity = to_decimal(message.pop(0), 4)
-        qty.difference = message.pop(0)
+        qty.type_ = message.pop(0) if message else ''
+        qty.quantity = to_decimal(message.pop(0), 4) if message else Decimal(0)
+        qty.difference = message.pop(0) if message else ''
         if not getattr(self, 'quantities', False):
             self.quantities = []
         self.quantities += (qty, )
@@ -405,9 +406,9 @@ class EdiShipmentIn(ModelSQL, ModelView):
                 return s.party and s.party.id
 
     def read_BGM(self, message):
-        self.number = message.pop(0)
-        self.type_ = message.pop(0)
-        self.function_ = message.pop(0)
+        self.number = message.pop(0) if message else ''
+        self.type_ = message.pop(0) if message else ''
+        self.function_ = message.pop(0) if message else ''
 
     def read_DTM(self, message):
         if message:
@@ -420,7 +421,7 @@ class EdiShipmentIn(ModelSQL, ModelView):
         REF = pool.get('edi.shipment.in.reference')
 
         ref = REF()
-        ref.type_ = message.pop(0)
+        ref.type_ = message.pop(0) if message else ''
         if message:
             ref.reference = message.pop(0)
         if message:
