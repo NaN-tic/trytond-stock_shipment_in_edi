@@ -303,6 +303,7 @@ class EdiShipmentInLine(ModelSQL, ModelView):
         pool = Pool()
         Barcode = pool.get('product.code')
         REF = pool.get('edi.shipment.in.reference')
+        Purchase = pool.get('purchase.purchase')
 
         domain = [('number', '=', self.code)]
         barcode = Barcode.search(domain, limit=1)
@@ -312,8 +313,7 @@ class EdiShipmentInLine(ModelSQL, ModelView):
         self.product = product
 
         purchases = [x.origin for x in edi_shipment.references if
-            x.type_ == 'ON' and x.origin
-            and x.origin.__name__ == 'purchase.purchase']
+            x.type_ == 'ON' and isinstance(x.origin, Purchase)]
 
         self.references = []
         for purchase in purchases:
