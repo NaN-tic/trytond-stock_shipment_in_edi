@@ -21,6 +21,8 @@
     <field name="expiration_date"/>
     <label name="packing_date"/>
     <field name="packing_date"/>
+    <label name="planned_date"/>
+    <field name="planned_date"/>
     <field name="references" colspan="2"/>
     <field name="quantities" colspan="2"/>
 </form>

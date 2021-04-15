@@ -16,6 +16,7 @@ MODULE_PATH = os.path.dirname(os.path.abspath(__file__))
 KNOWN_EXTENSIONS = ['.txt', '.edi', '.pla']
 DATE_FORMAT = '%Y%m%d'
 
+
 def to_date(value):
     if value is None or value == '':
         return None
@@ -24,6 +25,7 @@ def to_date(value):
     if value == '00000000':
         return
     return datetime.strptime(value, DATE_FORMAT)
+
 
 def to_decimal(value, digits=2):
     if value is None or value == '':
@@ -202,11 +204,13 @@ class EdiShipmentInLine(ModelSQL, ModelView):
         'Marking Instructions', readonly=True)
     expiration_date = fields.Date('Expiration Date', readonly=True)
     packing_date = fields.Date('Packing Date', readonly=True)
+    planned_date = fields.Date('Planned Date', readonly=True)
     quantities = fields.One2Many('edi.shipment.in.line.qty',
         'edi_shipment_line', 'Quantities')
     references = fields.One2Many('edi.shipment.in.reference',
         'edi_shipment_in_line', 'References')
-    edi_shipment = fields.Many2One('edi.shipment.in', 'Shipment', readonly=True)
+    edi_shipment = fields.Many2One('edi.shipment.in', 'Shipment',
+        readonly=True)
     product = fields.Many2One('product.product', 'Product')
 
     def read_LIN(self, message):
@@ -287,6 +291,10 @@ class EdiShipmentInLine(ModelSQL, ModelView):
             self.quantities = []
         self.quantities += (qty, )
 
+    def read_DTMLIN(self, message):
+        if message:
+            self.planned_date = to_date(message.pop(0))
+
     def read_MOALIN(self, message):
         # Not implemented
         pass
@@ -351,8 +359,8 @@ class EdiShipmentInLineQty(ModelSQL, ModelView):
         ('BP', 'Partial Shipment'),
         ('CP', 'Partial Shipment but Complete')],
         'Difference', readonly=True)
-    edi_shipment_line = fields.Many2One('edi.shipment.in.line', 'Shipment Line',
-        readonly=True)
+    edi_shipment_line = fields.Many2One('edi.shipment.in.line',
+        'Shipment Line', readonly=True)
 
 
 class EdiShipmentIn(ModelSQL, ModelView):
@@ -473,8 +481,8 @@ class EdiShipmentIn(ModelSQL, ModelView):
 
     def get_quantity(line):
         for qty in line.quantities:
-           if qty.type_ == '12':
-               return float(qty.quantity)
+            if qty.type_ == '12':
+                return float(qty.quantity)
 
     @classmethod
     def import_edi_file(cls, shipments, data):
@@ -654,6 +662,7 @@ class EdiShipmentIn(ModelSQL, ModelView):
                         move.shipment = shipment
                         move.quantity = quantity
                         move.lot = cls._get_new_lot(cls, line, quantity)
+                        move.planned_date = line.planned_date
                         move_to_save.append(move)
                     else:
                         quantity = cls.get_quantity(line)
@@ -661,6 +670,7 @@ class EdiShipmentIn(ModelSQL, ModelView):
                         move.shipment = shipment
                         move.quantity = quantity
                         move.lot = cls._get_new_lot(cls, line, quantity)
+                        move.planned_date = line.planned_date
                         move_to_save.append(move)
 
             edi_shipment.save()
