@@ -122,6 +122,10 @@ msgctxt "field:edi.shipment.in.line,packing_date:"
 msgid "Packing Date"
 msgstr "Data d’embalatge"
 
+msgctxt "field:edi.shipment.in.line,planned_date:"
+msgid "Planned Date"
+msgstr "Data estimada"
+
 msgctxt "field:edi.shipment.in.line,product:"
 msgid "Product"
 msgstr "Producte"
