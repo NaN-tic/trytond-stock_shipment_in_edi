@@ -3,10 +3,7 @@
      copyright notices and license terms. -->
 <data>
     <xpath expr="/form" position="inside">
-        <newline/>
-        <separator id="edi_conf_group" string="EDI" colspan="4"/>
         <label name="inbox_path_edi"/>
         <field name="inbox_path_edi" colspan="3"/>
-        <newline/>
     </xpath>
 </data>
