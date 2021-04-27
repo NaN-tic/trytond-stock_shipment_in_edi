@@ -1,6 +1,6 @@
 # The COPYRIGHT file at the top level of this repository contains the full
 # copyright notices and license terms.
-from trytond.model import fields, ModelSQL, ModelView
+from trytond.model import fields, ModelSQL, ModelView, Workflow
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 import os
@@ -10,6 +10,7 @@ from datetime import datetime
 from decimal import Decimal
 from trytond.i18n import gettext
 from trytond.exceptions import UserError
+from trytond.pyson import Eval, Bool
 
 DEFAULT_FILES_LOCATION = '/tmp/'
 MODULE_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -212,6 +213,14 @@ class EdiShipmentInLine(ModelSQL, ModelView):
     edi_shipment = fields.Many2One('edi.shipment.in', 'Shipment',
         readonly=True)
     product = fields.Many2One('product.product', 'Product')
+    quantity = fields.Function(fields.Numeric('Quantity', digits=(16, 4)),
+        'shipment_quantity')
+
+    def shipment_quantity(self, name):
+        for q in self.quantities:
+            if q.type_ == '12':
+                return q.quantity
+        return Decimal('0')
 
     def read_LIN(self, message):
         self.code = message.pop(0) if message else ''
@@ -363,7 +372,7 @@ class EdiShipmentInLineQty(ModelSQL, ModelView):
         'Shipment Line', readonly=True)
 
 
-class EdiShipmentIn(ModelSQL, ModelView):
+class EdiShipmentIn(Workflow, ModelSQL, ModelView):
     'Edi shipment In'
     __name__ = 'edi.shipment.in'
 
@@ -387,18 +396,49 @@ class EdiShipmentIn(ModelSQL, ModelView):
     shipment = fields.Many2One('stock.shipment.in', 'Shipment')
     party = fields.Function(fields.Many2One('party.party', 'Shipment Party'),
         'get_party', searcher='search_party')
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('confirmed', 'Confirmed'),
+        ('cancelled', 'Cancelled'),
+        ], 'State', required=True, readonly=True, select=True)
 
     @classmethod
     def __setup__(cls):
         super().__setup__()
+        cls._transitions |= set((
+                ('draft', 'confirmed'),
+                ('confirmed', 'cancelled'),
+                ('confirmed', 'draft'),
+                ('cancelled', 'draft'),
+                ('draft', 'cancelled')
+                ))
         cls._buttons.update({
             'create_shipment': {},
-            'search_references': {}
-        })
+            'search_references': {},
+            'cancel': {
+                'invisible': Eval('state') == 'cancelled',
+                'icon': 'tryton-cancel',
+                'depends': ['state'],
+                },
+            'draft': {
+                'invisible': Eval('state') != 'cancelled',
+                'icon': 'tryton-clear',
+                'depends': ['state'],
+                },
+            'confirm': {
+                'invisible': Eval('state') != 'draft',
+                'icon': 'tryton-forward',
+                'depends': ['state'],
+                },
+            })
 
     @staticmethod
     def default_company():
         return Transaction().context.get('company')
+
+    @staticmethod
+    def default_state():
+        return 'draft'
 
     @classmethod
     def search_party(cls, name, clause):
@@ -412,6 +452,24 @@ class EdiShipmentIn(ModelSQL, ModelView):
         for s in self.suppliers:
             if s.type_ == 'NADSU':
                 return s.party and s.party.id
+
+    @classmethod
+    @ModelView.button
+    @Workflow.transition('cancelled')
+    def cancel(cls, edi_shipments):
+        pass
+
+    @classmethod
+    @ModelView.button
+    @Workflow.transition('draft')
+    def draft(cls, edi_shipments):
+        pass
+
+    @classmethod
+    @ModelView.button
+    @Workflow.transition('confirmed')
+    def confirm(cls, edi_shipments):
+        pass
 
     def read_BGM(self, message):
         self.number = message.pop(0) if message else ''
