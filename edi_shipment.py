@@ -11,6 +11,7 @@ from decimal import Decimal
 from trytond.i18n import gettext
 from trytond.exceptions import UserError
 from trytond.pyson import Eval, Bool
+import barcodenumber
 
 DEFAULT_FILES_LOCATION = '/tmp/'
 MODULE_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -223,8 +224,20 @@ class EdiShipmentInLine(ModelSQL, ModelView):
         return Decimal('0')
 
     def read_LIN(self, message):
+        def _get_code_type(code):
+            for code_type in ('EAN8', 'EAN13', 'EAN'):
+                check_code_ean = 'check_code_' + code_type.lower()
+                if getattr(barcodenumber, check_code_ean)(code):
+                    return code_type
+            if len(code) == 14:
+                return 'EAN14'
+            # TODO DUN14
+
         self.code = message.pop(0) if message else ''
-        self.code_type = message.pop(0) if message else ''
+        code_type = message.pop(0) if message else ''
+        if code_type == 'EN':
+            self.code_type = _get_code_type(self.code)
+
         self.line_number = message.pop(0) if message else ''
 
     def read_PIALIN(self, message):
@@ -401,6 +414,10 @@ class EdiShipmentIn(Workflow, ModelSQL, ModelView):
         ('confirmed', 'Confirmed'),
         ('cancelled', 'Cancelled'),
         ], 'State', required=True, readonly=True, select=True)
+    reference_stock_moves = fields.Function(fields.One2Many(
+        'stock.move', 'edi_shipment', 'Reference Stock Line',
+        domain=[('stock_type', '=', 'manual')]
+        ), 'get_reference_stock_moves')
 
     @classmethod
     def __setup__(cls):
@@ -541,6 +558,34 @@ class EdiShipmentIn(Workflow, ModelSQL, ModelView):
         for qty in line.quantities:
             if qty.type_ == '12':
                 return float(qty.quantity)
+
+    def get_reference_stock_moves(self, name=None):
+        pool = Pool()
+        Purchase = pool.get('purchase.purchase')
+        StockMove = pool.get('stock.move')
+
+        purchase_moves = {}
+
+        for reference in self.references:
+            if reference.type_ == 'ON' and reference.origin:
+                if isinstance(reference.origin, Purchase):
+                    for move in reference.origin.moves:
+                        purchase_moves[move.id] = move.quantity
+
+        for line in self.lines:
+            for reference in line.references:
+                if reference.type_ == 'ON' and reference.origin:
+                    if isinstance(reference.origin, StockMove):
+                        move = reference.origin
+                        if move.id in purchase_moves:
+                            purchase_moves[move.id] = (purchase_moves[move.id] -
+                                move.quantity)
+                            if purchase_moves[move.id] <= 0:
+                                purchase_moves.pop(move.id)
+                        else:
+                            purchase_moves[move.id] = move.quantity
+
+        return [x for x in purchase_moves]
 
     @classmethod
     def import_edi_file(cls, shipments, data):
