@@ -107,7 +107,6 @@ class EdiShipmentReference(ModelSQL, ModelView):
         res = Model.search([('number', '=', self.reference)], limit=1)
         self.origin = res[0] if res else None
 
-
 # class EdiShipmentInTransport(ModelSQL, ModelView):
 #     'Edi Shipment in Transport'
 #     __name__ = 'edi.shipment.in.transport'
@@ -154,6 +153,7 @@ class EdiShipmentReference(ModelSQL, ModelView):
 #     marking = fields.Char('Marking', readonly=True)
 #     qualifier = fields.Char('Qualifier', readonly=True)
 #     identity = fields.Char('Identity', readonly=True)
+
 
 class EdiShipmentInLine(ModelSQL, ModelView):
     'Edi Shipment in Line'
@@ -223,7 +223,17 @@ class EdiShipmentInLine(ModelSQL, ModelView):
         if message:
             self.supplier_code = message.pop(0)
         if message:
+            message.pop(0)
+        if message:
+            message.pop(0)
+        if message:
+            message.pop(0)
+        if message:
+            message.pop(0)
+        if message:
             self.serial_number = message.pop(0)
+        if message:
+            message.pop(0)
         if message:
             self.lot_number = message.pop(0)
 
@@ -275,7 +285,15 @@ class EdiShipmentInLine(ModelSQL, ModelView):
         if message:
             self.expiration_date = to_date(message.pop(0))
         if message:
+            message.pop(0)
+        if message:
+            message.pop(0)
+        if message:
             self.packing_date = to_date(message.pop(0))
+        if message:
+            message.pop(0)
+        if message:
+            message.pop(0)
         if message:
             self.lot_number = message.pop(0)
 
@@ -594,6 +612,8 @@ class EdiShipmentIn(ModelSQL, ModelView):
             lot.product = line.product
             lot.expiration_date = line.expiration_date
             lot.on_change_product()
+            if line.lot_number:
+                lot.number = line.lot_number
             return lot
 
     @classmethod
