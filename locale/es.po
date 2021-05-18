@@ -38,9 +38,17 @@ msgctxt "field:edi.shipment.in,references:"
 msgid "References"
 msgstr "Referencias"
 
+msgctxt "field:edi.shipment.in,references_stock_moves:"
+msgid "References Stock Moves"
+msgstr "Moviments d'estoc de les referències"
+
 msgctxt "field:edi.shipment.in,shipment:"
 msgid "Shipment"
 msgstr "Albarán"
+
+msgctxt "field:edi.shipment.in,state:"
+msgid "State"
+msgstr "Estado"
 
 msgctxt "field:edi.shipment.in,suppliers:"
 msgid "Supplier"
@@ -130,6 +138,10 @@ msgctxt "field:edi.shipment.in.line,quantities:"
 msgid "Quantities"
 msgstr "Cantidades"
 
+msgctxt "field:edi.shipment.in.line,quantity:"
+msgid "Quantity"
+msgstr "Cantidad"
+
 msgctxt "field:edi.shipment.in.line,references:"
 msgid "References"
 msgstr "Referencias"
@@ -198,6 +210,10 @@ msgctxt "field:edi.shipment.supplier,commercial_register:"
 msgid "Comercial Register"
 msgstr "Registro comercial"
 
+msgctxt "field:edi.shipment.supplier,country_code:"
+msgid "Country_code"
+msgstr "Código de país"
+
 msgctxt "field:edi.shipment.supplier,edi_code:"
 msgid "Edi Code"
 msgstr "Código Edi"
@@ -258,6 +274,21 @@ msgctxt "model:ir.action,name:act_edi_shipment_in_form"
 msgid "Edi Shipment"
 msgstr "Albarán Edi"
 
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_edi_shipment_in_domain_all"
+msgid "All"
+msgstr "Todo"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_edi_shipment_in_domain_confirmed"
+msgid "Confirmed"
+msgstr "Confirmada"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_edi_shipment_in_domain_draft"
+msgid "Draft"
+msgstr "Borrador"
+
 msgctxt "model:ir.cron,name:"
 msgid "Import EDI Supplier Shipments"
 msgstr "Importar Albaranes de Proveedor EDI"
@@ -278,6 +309,18 @@ msgctxt "model:ir.model.button,string:create_shipment_button"
 msgid "Create Shipment"
 msgstr "Crear albarán"
 
+msgctxt "model:ir.model.button,string:edi_shipment_in_cancel_button"
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgctxt "model:ir.model.button,string:edi_shipment_in_confirm_button"
+msgid "Confirm"
+msgstr "Confirmar"
+
+msgctxt "model:ir.model.button,string:edi_shipment_in_draft_button"
+msgid "Draft"
+msgstr "Borrador"
+
 msgctxt "model:ir.model.button,string:search_related_button"
 msgid "Search References"
 msgstr "Buscar referencias"
@@ -297,6 +340,18 @@ msgstr "Copiar"
 msgctxt "selection:edi.shipment.in,function_:"
 msgid "Original"
 msgstr "Original"
+
+msgctxt "selection:edi.shipment.in,state:"
+msgid "Cancelled"
+msgstr "Cancelado"
+
+msgctxt "selection:edi.shipment.in,state:"
+msgid "Confirmed"
+msgstr "Confirmada"
+
+msgctxt "selection:edi.shipment.in,state:"
+msgid "Draft"
+msgstr "Borrador"
 
 msgctxt "selection:edi.shipment.in,type_:"
 msgid "Expedition Warning"
@@ -444,19 +499,19 @@ msgstr "Proveedor legal"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "NAD"
-msgstr ""
+msgstr "NAD"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "NADMR"
-msgstr ""
+msgstr "NADMR"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "NADPE"
-msgstr ""
+msgstr "NADPE"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "NADPW"
-msgstr ""
+msgstr "NADPW"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "Payment Issuer"
@@ -483,20 +538,12 @@ msgid "Import EDI Shipment In Orders"
 msgstr "Importar pedidos albarán de proveedor EDI"
 
 msgctxt "view:edi.shipment.in:"
-msgid "Create Shipment"
-msgstr "Crear albarán"
-
-msgctxt "view:edi.shipment.in:"
 msgid "Lines"
 msgstr "Líneas"
 
 msgctxt "view:edi.shipment.in:"
 msgid "Parties"
 msgstr "Terceros"
-
-msgctxt "view:edi.shipment.in:"
-msgid "Search References"
-msgstr "Buscar referencias"
 
 msgctxt "view:stock.configuration:"
 msgid "EDI"
