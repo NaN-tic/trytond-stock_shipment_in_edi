@@ -414,8 +414,8 @@ class EdiShipmentIn(Workflow, ModelSQL, ModelView):
         ('confirmed', 'Confirmed'),
         ('cancelled', 'Cancelled'),
         ], 'State', required=True, readonly=True, select=True)
-    reference_stock_moves = fields.Function(fields.One2Many(
-        'stock.move', 'edi_shipment', 'Reference Stock Line',
+    references_stock_moves = fields.Function(fields.One2Many(
+        'stock.move', 'edi_shipment', 'References Stock Moves',
         domain=[('stock_type', '=', 'manual')]
         ), 'get_reference_stock_moves')
 
