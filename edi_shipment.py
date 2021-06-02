@@ -317,6 +317,10 @@ class EdiShipmentInLine(ModelSQL, ModelView):
         # Not implemented
         pass
 
+    def read_DTMLIN(self, message):
+        # Not implemented
+        pass
+
     def search_related(self, edi_shipment):
         pool = Pool()
         Barcode = pool.get('product.code')
