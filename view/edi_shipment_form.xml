@@ -26,7 +26,7 @@
       </page>
       <page id="lines" string="Lines">
         <field name="lines" colspan="2"/>
-        <field name="reference_stock_moves" colspan="2"/>
+        <field name="references_stock_moves" colspan="2"/>
       </page>
     </notebook>
     <button name="create_shipment"/>

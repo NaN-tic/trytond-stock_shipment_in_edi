@@ -5,7 +5,6 @@
     <field name="product"/>
     <field name="quantity"/>
     <field name="lot_number"/>
-    <field name="description_type"/>
     <field name="description"/>
     <field name="expiration_date"/>
 </tree>
