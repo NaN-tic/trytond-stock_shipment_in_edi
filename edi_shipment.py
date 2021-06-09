@@ -1,6 +1,6 @@
 # The COPYRIGHT file at the top level of this repository contains the full
 # copyright notices and license terms.
-from trytond.model import fields, ModelSQL, ModelView
+from trytond.model import fields, ModelSQL, ModelView, Workflow
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 import os
@@ -10,6 +10,8 @@ from datetime import datetime
 from decimal import Decimal
 from trytond.i18n import gettext
 from trytond.exceptions import UserError
+from trytond.pyson import Eval
+import barcodenumber
 
 DEFAULT_FILES_LOCATION = '/tmp/'
 MODULE_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -51,10 +53,10 @@ class StockConfiguration(metaclass=PoolMeta):
 
 
 class SupplierEdi(SupplierEdiMixin, ModelSQL, ModelView):
-    'Supplier Edi'
+    'EDI Supplier'
     __name__ = 'edi.shipment.supplier'
 
-    edi_shipment = fields.Many2One('edi.shipment.in', 'Edi Shipment')
+    edi_shipment = fields.Many2One('edi.shipment.in', 'EDI Shipment')
 
 
 class EdiShipmentReference(ModelSQL, ModelView):
@@ -108,7 +110,7 @@ class EdiShipmentReference(ModelSQL, ModelView):
         self.origin = res[0] if res else None
 
 # class EdiShipmentInTransport(ModelSQL, ModelView):
-#     'Edi Shipment in Transport'
+#     'EDI Shipment in Transport'
 #     __name__ = 'edi.shipment.in.transport'
 #     # TDT
 #     mode = fields.Selection([('10', 'Maritime'), ('20', 'Train'),
@@ -119,14 +121,14 @@ class EdiShipmentReference(ModelSQL, ModelView):
 #     name = fields.char('Name', readonly=True)
 #
 # class EdiShipmentInPackageSequence(ModelSQL, ModelView):
-#     'Edi Shipment in Package Sequence'
+#     'EDI Shipment in Package Sequence'
 #     __name__ = 'edi.shipment.in.package_sequence'
 #     # CPS
 #     number = fields.Integer('Number', readonly=True)
 #     predecessor = fields.Integer('Preedcessor', readonly=True)
 #
 # class EdiShipmentInPackage(ModelSQL, ModelView):
-#     'Edi Shipment in Package'
+#     'EDI Shipment in Package'
 #     __name__ = 'edi.shipment.in.package'
 #     # PAC
 #     quantity = fields.Integer('Number', readonly=True)
@@ -140,14 +142,14 @@ class EdiShipmentReference(ModelSQL, ModelView):
 #         readonly=True)
 #
 # class EdiShipmentInManipulation(ModelSQL, ModelView):
-#     'Edi Shipment in Manipulation'
+#     'EDI Shipment in Manipulation'
 #     __name__ = 'edi.shipment.in.manipulation'
 #     # HAN
 #     code = fields.Char('Code', readonly=True)
 #     description = fields.Char('Description', readonly=True)
 #
 # class EdiShipmentInPackageIdentification(ModelSQL, ModelView):
-#     'Edi Shipment in Package Identification'
+#     'EDI Shipment in Package Identification'
 #     __name__ = 'edi.shipment.in.package_identification'
 #     # PCI
 #     marking = fields.Char('Marking', readonly=True)
@@ -156,7 +158,7 @@ class EdiShipmentReference(ModelSQL, ModelView):
 
 
 class EdiShipmentInLine(ModelSQL, ModelView):
-    'Edi Shipment in Line'
+    'EDI Shipment in Line'
     __name__ = 'edi.shipment.in.line'
     # LIN, PIALIN, IMDLIN, MEALIN, PCILIN
     code = fields.Char('Code', readonly=True)
@@ -212,10 +214,38 @@ class EdiShipmentInLine(ModelSQL, ModelView):
     edi_shipment = fields.Many2One('edi.shipment.in', 'Shipment',
         readonly=True)
     product = fields.Many2One('product.product', 'Product')
+    quantity = fields.Function(fields.Numeric('Quantity', digits=(16, 4)),
+        'shipment_quantity')
+
+    def shipment_quantity(self, name):
+        for q in self.quantities:
+            if q.type_ == '12':
+                return q.quantity
+        return Decimal('0')
 
     def read_LIN(self, message):
+        def _get_code_type(code):
+            for code_type in ('EAN8', 'EAN13', 'EAN'):
+                check_code_ean = 'check_code_' + code_type.lower()
+                if getattr(barcodenumber, check_code_ean)(code):
+                    return code_type
+            if len(code) == 14:
+                return 'EAN14'
+            # TODO DUN14
+
         self.code = message.pop(0) if message else ''
-        self.code_type = message.pop(0) if message else ''
+        code_type = message.pop(0) if message else ''
+        if code_type == 'EN':
+            self.code_type = _get_code_type(self.code)
+        # Some times the provider send the EAN13 without left zeros
+        # and the EAN is an EAN13 but the check fail because it have
+        # less digits.
+        if self.code_type == 'EN' and len(self.code) < 13:
+            code = self.code.zfill(13)
+            if getattr(barcodenumber, 'check_code_ean13')(code):
+                self.code = code
+                self.code_type = 'EAN13'
+
         self.line_number = message.pop(0) if message else ''
 
     def read_PIALIN(self, message):
@@ -356,7 +386,7 @@ class EdiShipmentInLine(ModelSQL, ModelView):
 
 
 class EdiShipmentInLineQty(ModelSQL, ModelView):
-    'Edi Shipment in Line Qty'
+    'EDI Shipment in Line Qty'
     __name__ = 'edi.shipment.in.line.qty'
     # QTYLIN, QVRLIN
     type_ = fields.Selection([
@@ -385,8 +415,8 @@ class EdiShipmentInLineQty(ModelSQL, ModelView):
         'Shipment Line', readonly=True)
 
 
-class EdiShipmentIn(ModelSQL, ModelView):
-    'Edi shipment In'
+class EdiShipmentIn(Workflow, ModelSQL, ModelView):
+    'EDI shipment In'
     __name__ = 'edi.shipment.in'
 
     company = fields.Many2One('company.company', 'Company', readonly=True)
@@ -409,18 +439,53 @@ class EdiShipmentIn(ModelSQL, ModelView):
     shipment = fields.Many2One('stock.shipment.in', 'Shipment')
     party = fields.Function(fields.Many2One('party.party', 'Shipment Party'),
         'get_party', searcher='search_party')
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('confirmed', 'Confirmed'),
+        ('cancelled', 'Cancelled'),
+        ], 'State', required=True, readonly=True, select=True)
+    references_stock_moves = fields.Function(fields.One2Many(
+        'stock.move', 'edi_shipment', 'References Stock Moves',
+        domain=[('stock_type', '=', 'manual')]
+        ), 'get_reference_stock_moves')
 
     @classmethod
     def __setup__(cls):
         super().__setup__()
+        cls._transitions |= set((
+                ('draft', 'confirmed'),
+                ('confirmed', 'cancelled'),
+                ('confirmed', 'draft'),
+                ('cancelled', 'draft'),
+                ('draft', 'cancelled')
+                ))
         cls._buttons.update({
             'create_shipment': {},
-            'search_references': {}
-        })
+            'search_references': {},
+            'cancel': {
+                'invisible': Eval('state') == 'cancelled',
+                'icon': 'tryton-cancel',
+                'depends': ['state'],
+                },
+            'draft': {
+                'invisible': Eval('state') != 'cancelled',
+                'icon': 'tryton-clear',
+                'depends': ['state'],
+                },
+            'confirm': {
+                'invisible': Eval('state') != 'draft',
+                'icon': 'tryton-forward',
+                'depends': ['state'],
+                },
+            })
 
     @staticmethod
     def default_company():
         return Transaction().context.get('company')
+
+    @staticmethod
+    def default_state():
+        return 'draft'
 
     @classmethod
     def search_party(cls, name, clause):
@@ -434,6 +499,24 @@ class EdiShipmentIn(ModelSQL, ModelView):
         for s in self.suppliers:
             if s.type_ == 'NADSU':
                 return s.party and s.party.id
+
+    @classmethod
+    @ModelView.button
+    @Workflow.transition('cancelled')
+    def cancel(cls, edi_shipments):
+        pass
+
+    @classmethod
+    @ModelView.button
+    @Workflow.transition('draft')
+    def draft(cls, edi_shipments):
+        pass
+
+    @classmethod
+    @ModelView.button
+    @Workflow.transition('confirmed')
+    def confirm(cls, edi_shipments):
+        pass
 
     def read_BGM(self, message):
         self.number = message.pop(0) if message else ''
@@ -505,6 +588,34 @@ class EdiShipmentIn(ModelSQL, ModelView):
         for qty in line.quantities:
             if qty.type_ == '12':
                 return float(qty.quantity)
+
+    def get_reference_stock_moves(self, name=None):
+        pool = Pool()
+        Purchase = pool.get('purchase.purchase')
+        StockMove = pool.get('stock.move')
+
+        purchase_moves = {}
+
+        for reference in self.references:
+            if reference.type_ == 'ON' and reference.origin:
+                if isinstance(reference.origin, Purchase):
+                    for move in reference.origin.moves:
+                        purchase_moves[move.id] = move.quantity
+
+        for line in self.lines:
+            for reference in line.references:
+                if reference.type_ == 'ON' and reference.origin:
+                    if isinstance(reference.origin, StockMove):
+                        move = reference.origin
+                        if move.id in purchase_moves:
+                            purchase_moves[move.id] = (
+                                purchase_moves[move.id] - move.quantity)
+                            if purchase_moves[move.id] <= 0:
+                                purchase_moves.pop(move.id)
+                        else:
+                            purchase_moves[move.id] = move.quantity
+
+        return [x for x in purchase_moves]
 
     @classmethod
     def import_edi_file(cls, shipments, data):

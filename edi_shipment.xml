@@ -50,7 +50,7 @@
       </record>
 
       <record model="ir.action.act_window" id="act_edi_shipment_in_form">
-          <field name="name">Edi Shipment</field>
+          <field name="name">EDI Shipment</field>
           <field name="res_model">edi.shipment.in</field>
       </record>
 
@@ -66,7 +66,7 @@
           <field name="act_window" ref="act_edi_shipment_in_form"/>
       </record>
 
-      <menuitem name="Edi Shipment" parent="stock.menu_stock"
+      <menuitem name="EDI Shipment" parent="stock.menu_stock"
           id="menu_edi_shipment" sequence="40"/>
 
       <menuitem parent="menu_edi_shipment"
@@ -128,5 +128,43 @@
           <field name="group" ref="res.group_admin"/>
       </record>
 
+      <record model="ir.action.act_window.domain" id="act_edi_shipment_in_domain_draft">
+          <field name="name">Draft</field>
+          <field name="sequence" eval="10"/>
+          <field name="domain"
+              eval="[('state', '=', 'draft')]"
+              pyson="1"/>
+          <field name="act_window" ref="act_edi_shipment_in_form"/>
+      </record>
+      <record model="ir.action.act_window.domain" id="act_edi_shipment_in_domain_confirmed">
+          <field name="name">Confirmed</field>
+          <field name="sequence" eval="20"/>
+          <field name="domain"
+              eval="[('state', '=', 'confirmed')]"
+              pyson="1"/>
+          <field name="act_window" ref="act_edi_shipment_in_form"/>
+      </record>
+      <record model="ir.action.act_window.domain" id="act_edi_shipment_in_domain_all">
+          <field name="name">All</field>
+          <field name="sequence" eval="9999"/>
+          <field name="act_window" ref="act_edi_shipment_in_form"/>
+      </record>
+
+      <!-- buttons -->
+        <record model="ir.model.button" id="edi_shipment_in_cancel_button">
+            <field name="name">cancel</field>
+            <field name="string">Cancel</field>
+            <field name="model" search="[('model', '=', 'edi.shipment.in')]"/>
+        </record>
+        <record model="ir.model.button" id="edi_shipment_in_draft_button">
+            <field name="name">draft</field>
+            <field name="string">Draft</field>
+            <field name="model" search="[('model', '=', 'edi.shipment.in')]"/>
+        </record>
+        <record model="ir.model.button" id="edi_shipment_in_confirm_button">
+            <field name="name">confirm</field>
+            <field name="string">Confirm</field>
+            <field name="model" search="[('model', '=', 'edi.shipment.in')]"/>
+        </record>
     </data>
 </tryton>

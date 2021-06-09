@@ -7,7 +7,7 @@ this repository contains the full copyright notices and license terms. -->
           <field name="text">There is not move reference in line number %(number)s.</field>
       </record>
       <record model="ir.message" id="msg_no_purchase_ref">
-          <field name="text">There is not purchase origin in edi shipment references.</field>
+          <field name="text">There is not purchase origin in EDI shipment references.</field>
       </record>
       <record model="ir.message" id="msg_no_product">
           <field name="text">There is not product in line number %(number)s.</field>
