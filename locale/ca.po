@@ -38,9 +38,17 @@ msgctxt "field:edi.shipment.in,references:"
 msgid "References"
 msgstr "Referències"
 
+msgctxt "field:edi.shipment.in,references_stock_moves:"
+msgid "References Stock Moves"
+msgstr "Movimientos de stock de las referencias"
+
 msgctxt "field:edi.shipment.in,shipment:"
 msgid "Shipment"
 msgstr "Albarà"
+
+msgctxt "field:edi.shipment.in,state:"
+msgid "State"
+msgstr "Estat"
 
 msgctxt "field:edi.shipment.in,suppliers:"
 msgid "Supplier"
@@ -126,6 +134,10 @@ msgctxt "field:edi.shipment.in.line,quantities:"
 msgid "Quantities"
 msgstr "Quantitats"
 
+msgctxt "field:edi.shipment.in.line,quantity:"
+msgid "Quantity"
+msgstr "Quantitat"
+
 msgctxt "field:edi.shipment.in.line,references:"
 msgid "References"
 msgstr "Referències"
@@ -194,13 +206,17 @@ msgctxt "field:edi.shipment.supplier,commercial_register:"
 msgid "Comercial Register"
 msgstr "Registre comercial"
 
+msgctxt "field:edi.shipment.supplier,country_code:"
+msgid "Country_code"
+msgstr "Codi de país"
+
 msgctxt "field:edi.shipment.supplier,edi_code:"
-msgid "Edi Code"
-msgstr "Codi Edi"
+msgid "EDI Code"
+msgstr "Codi EDI"
 
 msgctxt "field:edi.shipment.supplier,edi_shipment:"
-msgid "Edi Shipment"
-msgstr "Albarà Edi"
+msgid "EDI Shipment"
+msgstr "EDI Albarà"
 
 msgctxt "field:edi.shipment.supplier,name:"
 msgid "Name"
@@ -231,28 +247,43 @@ msgid "Inbox Path EDI"
 msgstr "Path d'entrada EDI"
 
 msgctxt "model:edi.shipment.in,name:"
-msgid "Edi shipment In"
-msgstr "Albarà Edi de proveïdor"
+msgid "EDI shipment In"
+msgstr "EDI Albarà de proveïdor"
 
 msgctxt "model:edi.shipment.in.line,name:"
-msgid "Edi Shipment in Line"
-msgstr "Línia d'albarà Edi de proveïdor"
+msgid "EDI Shipment in Line"
+msgstr "Línia d'albarà EDI de proveïdor"
 
 msgctxt "model:edi.shipment.in.line.qty,name:"
-msgid "Edi Shipment in Line Qty"
-msgstr "Quantitat línia d'albarà Edi de proveïdor"
+msgid "EDI Shipment in Line Qty"
+msgstr "Quantitat línia d'albarà EDI de proveïdor"
 
 msgctxt "model:edi.shipment.in.reference,name:"
 msgid "Shipment In Reference"
 msgstr "Referència albará de proveïdor"
 
 msgctxt "model:edi.shipment.supplier,name:"
-msgid "Supplier Edi"
-msgstr "Proveïdor Edi"
+msgid "Supplier EDI"
+msgstr "Proveïdor EDI"
 
 msgctxt "model:ir.action,name:act_edi_shipment_in_form"
-msgid "Edi Shipment"
-msgstr "Albarà Edi"
+msgid "EDI Shipment"
+msgstr "EDI Albarà"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_edi_shipment_in_domain_all"
+msgid "All"
+msgstr "Tot"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_edi_shipment_in_domain_confirmed"
+msgid "Confirmed"
+msgstr "Confirmat"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_edi_shipment_in_domain_draft"
+msgid "Draft"
+msgstr "Esborrany"
 
 msgctxt "model:ir.cron,name:"
 msgid "Import EDI Supplier Shipments"
@@ -267,24 +298,36 @@ msgid "There is not product in line number %(number)s."
 msgstr "No hi ha producte a la línia número %(number)s."
 
 msgctxt "model:ir.message,text:msg_no_purchase_ref"
-msgid "There is not purchase origin in edi shipment references."
-msgstr "No hi ha origen de compra a les referències de l'albarà edi."
+msgid "There is not purchase origin in EDI shipment references."
+msgstr "No hi ha origen de compra a les referències de l'albarà EDI."
 
 msgctxt "model:ir.model.button,string:create_shipment_button"
 msgid "Create Shipment"
 msgstr "Crear albarà"
+
+msgctxt "model:ir.model.button,string:edi_shipment_in_cancel_button"
+msgid "Cancel"
+msgstr "Cancel·la"
+
+msgctxt "model:ir.model.button,string:edi_shipment_in_confirm_button"
+msgid "Confirm"
+msgstr "Confirmar"
+
+msgctxt "model:ir.model.button,string:edi_shipment_in_draft_button"
+msgid "Draft"
+msgstr "Esborrany"
 
 msgctxt "model:ir.model.button,string:search_related_button"
 msgid "Search References"
 msgstr "Cerca referències"
 
 msgctxt "model:ir.ui.menu,name:menu_edi_shipment"
-msgid "Edi Shipment"
-msgstr "Albarà Edi"
+msgid "EDI Shipment"
+msgstr "EDI Albarà"
 
 msgctxt "model:ir.ui.menu,name:menuitem_edi_shipment"
-msgid "Edi Shipment"
-msgstr "Albarà Edi"
+msgid "EDI Shipment"
+msgstr "EDI Albarà"
 
 msgctxt "selection:edi.shipment.in,function_:"
 msgid "Copy"
@@ -293,6 +336,18 @@ msgstr "Copiar"
 msgctxt "selection:edi.shipment.in,function_:"
 msgid "Original"
 msgstr "Original"
+
+msgctxt "selection:edi.shipment.in,state:"
+msgid "Cancelled"
+msgstr "Cancel·lada"
+
+msgctxt "selection:edi.shipment.in,state:"
+msgid "Confirmed"
+msgstr "Confirmat"
+
+msgctxt "selection:edi.shipment.in,state:"
+msgid "Draft"
+msgstr "Esborrany"
 
 msgctxt "selection:edi.shipment.in,type_:"
 msgid "Expedition Warning"
@@ -440,19 +495,19 @@ msgstr "Proveïdor legal"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "NAD"
-msgstr ""
+msgstr "NAD"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "NADMR"
-msgstr ""
+msgstr "NADMR"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "NADPE"
-msgstr ""
+msgstr "NADPE"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "NADPW"
-msgstr ""
+msgstr "NADPW"
 
 msgctxt "selection:edi.shipment.supplier,type_:"
 msgid "Payment Issuer"
@@ -479,20 +534,12 @@ msgid "Import EDI Shipment In Orders"
 msgstr "Importar comandes albará de proveïdor EDI"
 
 msgctxt "view:edi.shipment.in:"
-msgid "Create Shipment"
-msgstr "Crear albarà"
-
-msgctxt "view:edi.shipment.in:"
 msgid "Lines"
 msgstr "Línies"
 
 msgctxt "view:edi.shipment.in:"
 msgid "Parties"
 msgstr "Tercers"
-
-msgctxt "view:edi.shipment.in:"
-msgid "Search References"
-msgstr "Cerca referències"
 
 msgctxt "view:stock.configuration:"
 msgid "EDI"

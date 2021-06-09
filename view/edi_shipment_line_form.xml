@@ -1,26 +1,36 @@
 <form col="8">
-    <label name="code"/>
-    <field name="code"/>
-    <label name="code_type"/>
-    <field name="code_type"/>
-    <label name="product"/>
-    <field name="product"/>
-    <label name="line_number"/>
-    <field name="line_number"/>
-    <label name="purchaser_code"/>
-    <field name="purchaser_code"/>
-    <label name="supplier_code"/>
-    <field name="supplier_code"/>
-    <label name="serial_number"/>
-    <field name="serial_number"/>
-    <label name="lot_number"/>
-    <field name="lot_number"/>
-    <label name="description_type"/>
-    <field name="description_type"/>
-    <label name="expiration_date"/>
-    <field name="expiration_date"/>
-    <label name="packing_date"/>
-    <field name="packing_date"/>
-    <field name="references" colspan="2"/>
-    <field name="quantities" colspan="2"/>
+  <notebook>
+    <page name="code">
+      <label name="code"/>
+      <field name="code"/>
+      <label name="code_type"/>
+      <field name="code_type"/>
+      <label name="product"/>
+      <field name="product"/>
+      <label name="line_number"/>
+      <field name="line_number"/>
+      <label name="purchaser_code"/>
+      <field name="purchaser_code"/>
+      <label name="supplier_code"/>
+      <field name="supplier_code"/>
+      <label name="serial_number"/>
+      <field name="serial_number"/>
+      <label name="lot_number"/>
+      <field name="lot_number"/>
+      <label name="description_type"/>
+      <field name="description_type"/>
+      <label name="expiration_date"/>
+      <field name="expiration_date"/>
+      <label name="packing_date"/>
+      <field name="packing_date"/>
+      <label name="planned_date"/>
+      <field name="planned_date"/>
+    </page>
+    <page name="references">
+      <field name="references"/>
+    </page>
+    <page name="quantities">
+      <field name="quantities"/>
+    </page>
+  </notebook>
 </form>
