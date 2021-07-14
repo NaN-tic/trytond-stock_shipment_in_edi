@@ -418,10 +418,6 @@ msgid "Partial Shipment but Complete"
 msgstr "Albará parcial però complet"
 
 msgctxt "selection:edi.shipment.in.line.qty,type_:"
-msgid "21"
-msgstr "21"
-
-msgctxt "selection:edi.shipment.in.line.qty,type_:"
 msgid "45E"
 msgstr "45E"
 
@@ -436,6 +432,10 @@ msgstr "Quantitat enviada"
 msgctxt "selection:edi.shipment.in.line.qty,type_:"
 msgid "Quantity on package"
 msgstr "Quantitat al paquet"
+
+msgctxt "selection:edi.shipment.in.line.qty,type_:"
+msgid "Units ordered"
+msgstr "Unitats demanades"
 
 msgctxt "selection:edi.shipment.in.line.qty,unit:"
 msgid "EA"
