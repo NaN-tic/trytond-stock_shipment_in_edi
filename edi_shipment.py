@@ -164,11 +164,11 @@ class EdiShipmentInLine(ModelSQL, ModelView):
     code = fields.Char('Code', readonly=True)
     code_type = fields.Selection([
         (None, ''),
+        ('EAN', 'EAN'),
         ('EAN8', 'EAN8'),
         ('EAN13', 'EAN13'),
         ('EAN14', 'EAN14'),
-        ('DUN14', 'DUN14'),
-        ('EN', 'EN')],
+        ('DUN14', 'DUN14')],
         'Code Type')
     line_number = fields.Integer('Line Number', readonly=True)
     purchaser_code = fields.Char('Purchaser Code', readonly=True)
@@ -225,7 +225,7 @@ class EdiShipmentInLine(ModelSQL, ModelView):
 
     def read_LIN(self, message):
         def _get_code_type(code):
-            for code_type in ('EAN8', 'EAN13', 'EAN'):
+            for code_type in ('EAN', 'EAN8', 'EAN13'):
                 check_code_ean = 'check_code_' + code_type.lower()
                 if getattr(barcodenumber, check_code_ean)(code):
                     return code_type
@@ -240,7 +240,7 @@ class EdiShipmentInLine(ModelSQL, ModelView):
         # Some times the provider send the EAN13 without left zeros
         # and the EAN is an EAN13 but the check fail because it have
         # less digits.
-        if self.code_type == 'EN' and len(self.code) < 13:
+        if self.code_type == 'EAN' and len(self.code) < 13:
             code = self.code.zfill(13)
             if getattr(barcodenumber, 'check_code_ean13')(code):
                 self.code = code
@@ -355,10 +355,6 @@ class EdiShipmentInLine(ModelSQL, ModelView):
         # Not implemented
         pass
 
-    def read_DTMLIN(self, message):
-        # Not implemented
-        pass
-
     def search_related(self, edi_shipment):
         pool = Pool()
         Barcode = pool.get('product.code')
@@ -394,7 +390,7 @@ class EdiShipmentInLineQty(ModelSQL, ModelView):
         ('12', 'Quantity Sended'),
         ('59', 'Quantity on package'),
         ('192', 'Free Quantity'),
-        ('21', '21'),
+        ('21', 'Units ordered'),
         ('45E', '45E')],
         'Quantity Type', readonly=True)
     quantity = fields.Numeric('Quantity', readonly=True)
@@ -534,7 +530,10 @@ class EdiShipmentIn(Workflow, ModelSQL, ModelView):
         REF = pool.get('edi.shipment.in.reference')
 
         ref = REF()
-        ref.type_ = message.pop(0) if message else ''
+        type_ = message.pop(0) if message else ''
+
+        ref.type_ = type_ if type_ in ('DQ', 'ON', 'LI', 'VN') else None
+
         if message:
             ref.reference = message.pop(0)
         if message:
