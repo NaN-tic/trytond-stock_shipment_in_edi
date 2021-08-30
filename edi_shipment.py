@@ -357,15 +357,15 @@ class EdiShipmentInLine(ModelSQL, ModelView):
 
     def search_related(self, edi_shipment):
         pool = Pool()
-        Barcode = pool.get('product.code')
+        ProductIdentifier = pool.get('product.identifier')
         REF = pool.get('edi.shipment.in.reference')
         Purchase = pool.get('purchase.purchase')
 
-        domain = [('number', '=', self.code)]
-        barcode = Barcode.search(domain, limit=1)
-        if not barcode:
+        domain = [('code', '=', self.code)]
+        codes = ProductIdentifier.search(domain, limit=1)
+        if not codes:
             return
-        product = barcode[0].product
+        product = codes[0].product
         self.product = product
 
         purchases = [x.origin for x in edi_shipment.references if
