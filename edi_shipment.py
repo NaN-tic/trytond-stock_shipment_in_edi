@@ -11,7 +11,7 @@ from decimal import Decimal
 from trytond.i18n import gettext
 from trytond.exceptions import UserError
 from trytond.pyson import Eval
-import barcodenumber
+from stdnum import ean
 
 DEFAULT_FILES_LOCATION = '/tmp/'
 MODULE_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -225,12 +225,10 @@ class EdiShipmentInLine(ModelSQL, ModelView):
 
     def read_LIN(self, message):
         def _get_code_type(code):
-            for code_type in ('EAN', 'EAN8', 'EAN13'):
-                check_code_ean = 'check_code_' + code_type.lower()
-                if getattr(barcodenumber, check_code_ean)(code):
-                    return code_type
-            if len(code) == 14:
-                return 'EAN14'
+            # stdnum.ena only handles numbers EAN-13, EAN-8, UPC (12-digit)
+            # and GTIN (EAN-14) format
+            if ean.is_valid(code):
+                return 'EAN%s' % str(len(code))
             # TODO DUN14
 
         self.code = message.pop(0) if message else ''
@@ -242,7 +240,7 @@ class EdiShipmentInLine(ModelSQL, ModelView):
         # less digits.
         if self.code_type == 'EAN' and len(self.code) < 13:
             code = self.code.zfill(13)
-            if getattr(barcodenumber, 'check_code_ean13')(code):
+            if ean.is_valid(code):
                 self.code = code
                 self.code_type = 'EAN13'
 
