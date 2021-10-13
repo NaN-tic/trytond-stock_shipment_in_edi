@@ -787,6 +787,10 @@ class EdiShipmentIn(Workflow, ModelSQL, ModelView):
                             number=line.line_number))
 
                 for ref in line.references:
+                    if not ref.origin:
+                        raise UserError(gettext(
+                                'stock_shipment_in_edi.msg_no_move_ref',
+                                number=line.line_number))
                     if ref.origin not in move_to_save:
                         quantity = cls.get_quantity(line)
                         move = ref.origin
