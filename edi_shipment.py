@@ -230,20 +230,19 @@ class EdiShipmentInLine(ModelSQL, ModelView):
             if ean.is_valid(code):
                 return 'EAN%s' % str(len(code))
             # TODO DUN14
+            return None
 
         self.code = message.pop(0) if message else ''
         code_type = message.pop(0) if message else ''
         if code_type == 'EN':
-            self.code_type = _get_code_type(self.code)
-        # Some times the provider send the EAN13 without left zeros
-        # and the EAN is an EAN13 but the check fail because it have
-        # less digits.
-        if self.code_type == 'EAN' and len(self.code) < 13:
-            code = self.code.zfill(13)
-            if ean.is_valid(code):
+            # Some times the provider send the EAN13 without left zeros
+            # and the EAN is an EAN13 but the check fail because it have
+            # less digits.
+            if len(self.code) < 13 and len(self.code) != 8:
+                code = self.code.zfill(13)
+            self.code_type = _get_code_type(code)
+            if self.code_type:
                 self.code = code
-                self.code_type = 'EAN13'
-
         self.line_number = message.pop(0) if message else ''
 
     def read_PIALIN(self, message):
