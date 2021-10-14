@@ -238,8 +238,8 @@ class EdiShipmentInLine(ModelSQL, ModelView):
             # Some times the provider send the EAN13 without left zeros
             # and the EAN is an EAN13 but the check fail because it have
             # less digits.
-            if len(self.code) < 13 and len(self.code) != 8:
-                code = self.code.zfill(13)
+            code = (self.code.zfill(13) if len(self.code) < 13 and
+                len(self.code) != 8 else self.code)
             self.code_type = _get_code_type(code)
             if self.code_type:
                 self.code = code
