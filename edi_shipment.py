@@ -49,7 +49,7 @@ class Cron(metaclass=PoolMeta):
 class StockConfiguration(metaclass=PoolMeta):
     __name__ = 'stock.configuration'
 
-    inbox_path_edi = fields.Char('EDI Shipment Inbox Path EDI')
+    inbox_path_edi = fields.Char('EDI Shipment Inbox Path')
 
 
 class SupplierEdi(SupplierEdiMixin, ModelSQL, ModelView):
