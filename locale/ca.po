@@ -215,8 +215,8 @@ msgid "Country_code"
 msgstr "Codi de país"
 
 msgctxt "field:edi.shipment.supplier,edi_code:"
-msgid "EDI Code"
-msgstr "Codi EDI"
+msgid "Edi Code"
+msgstr "Codi Edi"
 
 msgctxt "field:edi.shipment.supplier,edi_shipment:"
 msgid "EDI Shipment"
@@ -247,8 +247,8 @@ msgid "zip"
 msgstr "zip"
 
 msgctxt "field:stock.configuration,inbox_path_edi:"
-msgid "Inbox Path EDI"
-msgstr "Path d'entrada EDI"
+msgid "EDI Shipment Inbox Path EDI"
+msgstr "EDI Ruta d'entrada Albarà"
 
 msgctxt "model:edi.shipment.in,name:"
 msgid "EDI shipment In"
@@ -267,7 +267,7 @@ msgid "Shipment In Reference"
 msgstr "Referència albará de proveïdor"
 
 msgctxt "model:edi.shipment.supplier,name:"
-msgid "Supplier EDI"
+msgid "EDI Supplier"
 msgstr "Proveïdor EDI"
 
 msgctxt "model:ir.action,name:act_edi_shipment_in_form"
@@ -362,6 +362,10 @@ msgid "DUN14"
 msgstr "DUN14"
 
 msgctxt "selection:edi.shipment.in.line,code_type:"
+msgid "EAN"
+msgstr "EAN"
+
+msgctxt "selection:edi.shipment.in.line,code_type:"
 msgid "EAN13"
 msgstr "EAN13"
 
@@ -372,10 +376,6 @@ msgstr "EAN14"
 msgctxt "selection:edi.shipment.in.line,code_type:"
 msgid "EAN8"
 msgstr "EAN8"
-
-msgctxt "selection:edi.shipment.in.line,code_type:"
-msgid "EN"
-msgstr "EN"
 
 msgctxt "selection:edi.shipment.in.line,desccod:"
 msgid "Consumption Unit"
