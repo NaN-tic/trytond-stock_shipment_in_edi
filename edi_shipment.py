@@ -16,6 +16,7 @@ from stdnum import ean
 DEFAULT_FILES_LOCATION = '/tmp/'
 MODULE_PATH = os.path.dirname(os.path.abspath(__file__))
 KNOWN_EXTENSIONS = ['.txt', '.edi', '.pla']
+SHORT_DATE_FORMAT = '%y%m%d'
 DATE_FORMAT = '%Y%m%d'
 
 
@@ -26,6 +27,8 @@ def to_date(value):
         value = value[0:8]
     if value == '00000000':
         return
+    if len(value) == 6:
+        return datetime.strptime(value, SHORT_DATE_FORMAT)
     return datetime.strptime(value, DATE_FORMAT)
 
 
@@ -202,7 +205,8 @@ class EdiShipmentInLine(ModelSQL, ModelView):
     dimension_max = fields.Numeric('Max', readonly=True)
     marking_instructions = fields.Selection([
         (None, ''),
-        ('36E', 'Supplier Instructions')],
+        ('36E', 'Supplier Instructions'),
+        ('33E', 'Supplier Instructions')],
         'Marking Instructions', readonly=True)
     expiration_date = fields.Date('Expiration Date', readonly=True)
     packing_date = fields.Date('Packing Date', readonly=True)

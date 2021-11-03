@@ -535,7 +535,7 @@ msgstr "Proveïdor"
 
 msgctxt "selection:ir.cron,method:"
 msgid "Import EDI Shipment In Orders"
-msgstr "Importar comandes albará de proveïdor EDI"
+msgstr "Importar Albarà de Proveïdor EDI"
 
 msgctxt "view:edi.shipment.in:"
 msgid "Lines"
