@@ -205,8 +205,7 @@ class EdiShipmentInLine(ModelSQL, ModelView):
     dimension_max = fields.Numeric('Max', readonly=True)
     marking_instructions = fields.Selection([
         (None, ''),
-        ('36E', 'Supplier Instructions'),
-        ('33E', 'Supplier Instructions')],
+        ('36E', 'Supplier Instructions')],
         'Marking Instructions', readonly=True)
     expiration_date = fields.Date('Expiration Date', readonly=True)
     packing_date = fields.Date('Packing Date', readonly=True)
@@ -313,6 +312,8 @@ class EdiShipmentInLine(ModelSQL, ModelView):
 
     def read_PCILIN(self, message):
         self.marking_instructions = message.pop(0) if message else ''
+        if self.marking_instructions != '36E':
+            return
         if message:
             self.expiration_date = to_date(message.pop(0))
         if message:
