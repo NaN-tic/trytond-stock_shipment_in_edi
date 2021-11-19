@@ -311,9 +311,10 @@ class EdiShipmentInLine(ModelSQL, ModelView):
         self.references += (ref,)
 
     def read_PCILIN(self, message):
-        self.marking_instructions = message.pop(0) if message else ''
-        if self.marking_instructions != '36E':
+        marking_instructions = message.pop(0) if message else ''
+        if marking_instructions != '36E':
             return
+        self.marking_instructions = marking_instructions
         if message:
             self.expiration_date = to_date(message.pop(0))
         if message:
