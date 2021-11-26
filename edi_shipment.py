@@ -270,7 +270,7 @@ class EdiShipmentInLine(ModelSQL, ModelView):
     def read_IMDLIN(self, message):
         self.description_type = message.pop(0) if message else ''
         self.description = message.pop(0) if message else ''
-        if message:
+        if self.description_type == 'C' and message:
             self.desccod = message.pop(0)
 
     def read_MEALIN(self, message):
