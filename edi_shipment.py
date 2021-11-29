@@ -318,7 +318,10 @@ class EdiShipmentInLine(ModelSQL, ModelView):
         if message:
             self.expiration_date = to_date(message.pop(0))
         if message:
-            message.pop(0)
+            expiration_date = to_date(message.pop(0))
+            if (not self.expiration_date and expiration_date and
+                    expiration_date > datetime.today()):
+                self.expiration_date = expiration_date
         if message:
             message.pop(0)
         if message:
