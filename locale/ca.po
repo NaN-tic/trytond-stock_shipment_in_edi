@@ -198,10 +198,6 @@ msgctxt "field:edi.shipment.in.reference,type_:"
 msgid "Reference Code"
 msgstr "Codi de referència"
 
-msgctxt "field:edi.shipment.supplier,account_bank:"
-msgid "Account Bank"
-msgstr "Compte bancari"
-
 msgctxt "field:edi.shipment.supplier,city:"
 msgid "City"
 msgstr "Ciutat"
