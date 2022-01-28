@@ -10,6 +10,4 @@ this repository contains the full copyright notices and license terms. -->
   <field name="city"/>
   <field name="zip"/>
   <field name="vat"/>
-  <field name="country_code"/>
-  <field name="account_bank"/>
 </tree>
