@@ -4,8 +4,7 @@ from trytond.model import fields, ModelSQL, ModelView, Workflow
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 import os
-from trytond.modules.account_invoice_edi.invoice import (SupplierEdiMixin,
-    SUPPLIER_TYPE)
+from trytond.modules.party_edi.party import SupplierEdiMixin, SUPPLIER_TYPE
 from datetime import datetime
 from decimal import Decimal
 from trytond.i18n import gettext
@@ -60,6 +59,22 @@ class SupplierEdi(SupplierEdiMixin, ModelSQL, ModelView):
     __name__ = 'edi.shipment.supplier'
 
     edi_shipment = fields.Many2One('edi.shipment.in', 'EDI Shipment')
+
+    def read_NADMS(self, message):
+        self.type_ = 'NADMS'
+        self.edi_code = message.pop(0) if message else ''
+
+    def read_NADBY(self, message):
+        self.type_ = 'NADBY'
+        self.edi_code = message.pop(0) if message else ''
+
+    def read_NADSU(self, message):
+        self.type_ = 'NADSU'
+        self.edi_code = message.pop(0) if message else ''
+
+    def read_NADDP(self, message):
+        self.type_ = 'NADDP'
+        self.edi_code = message.pop(0) if message else ''
 
 
 class EdiShipmentReference(ModelSQL, ModelView):

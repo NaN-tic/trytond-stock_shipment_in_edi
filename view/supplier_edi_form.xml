@@ -20,6 +20,4 @@ this repository contains the full copyright notices and license terms. -->
   <field name="vat"/>
   <label name="country_code"/>
   <field name="country_code"/>
-  <label name="account_bank"/>
-  <field name="account_bank"/>
 </form>
