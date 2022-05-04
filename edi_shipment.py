@@ -452,9 +452,16 @@ class EdiShipmentIn(Workflow, ModelSQL, ModelView):
         'edi_shipment', 'References')
     suppliers = fields.One2Many('edi.shipment.supplier', 'edi_shipment',
         'Supplier', readonly=True)
-    manual_party = fields.Many2One('party.party', 'Manual Party')
+    manual_party = fields.Many2One('party.party', 'Manual Party', context={
+            'company': Eval('company'),
+            },
+        depends=['company'])
     shipment = fields.Many2One('stock.shipment.in', 'Shipment')
-    party = fields.Function(fields.Many2One('party.party', 'Shipment Party'),
+    party = fields.Function(fields.Many2One('party.party', 'Shipment Party',
+        context={
+            'company': Eval('company'),
+            },
+        depends=['company']),
         'get_party', searcher='search_party')
     state = fields.Selection([
         ('draft', 'Draft'),

@@ -166,5 +166,17 @@
             <field name="string">Confirm</field>
             <field name="model" search="[('model', '=', 'edi.shipment.in')]"/>
         </record>
+
+        <record model="ir.rule.group" id="rule_group_edi_shipment_in">
+            <field name="name">User in company</field>
+            <field name="model" search="[('model', '=', 'edi.shipment.in')]"/>
+            <field name="global_p" eval="True"/>
+        </record>
+        <record model="ir.rule" id="rule_edi_shipment_in1">
+            <field name="domain"
+                eval="[('company', 'in', Eval('companies', []))]"
+                pyson="1"/>
+            <field name="rule_group" ref="rule_group_edi_shipment_in"/>
+        </record>
     </data>
 </tryton>
