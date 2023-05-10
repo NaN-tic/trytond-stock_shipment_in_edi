@@ -40,7 +40,7 @@ msgstr "Referencias"
 
 msgctxt "field:edi.shipment.in,references_stock_moves:"
 msgid "References Stock Moves"
-msgstr "Moviments d'estoc de les referències"
+msgstr "Movimentos de stock de las referencias"
 
 msgctxt "field:edi.shipment.in,shipment:"
 msgid "Shipment"
